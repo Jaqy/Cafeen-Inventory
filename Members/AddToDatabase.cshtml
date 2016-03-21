@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.title = "Add Product";
+
+    <!--Validates that there is a genuine input in the fields so no blanks is created-->
+    Validation.RequireField("ProductName", "You haven't entered a Product Name");
+    //Validation.RequireField("Category", "You haven't entered a Category");
+    Validation.RequireField("Price", "You haven't entered a Price");
+    Validation.RequireField("PurchasePrice", "You haven't entered a Purchase Price");
+    Validation.RequireField("Stock", "You haven't entered Stock");
+    <!--Checks if the button is being pressed, and if it is pressed Request.Form gets the data from the boxes-->
+    var ProductName = "";
+    var Category = "";
+    var Price = "";
+    var PurchasePrice = "";
+    var Stock = "";
+
+          <!--Opens the database and inserts the data from above-->
+    var db = Database.Open("Cafeen");
+        <!--Collect the Category from the Database-->
+    var CategoryData = db.Query("SELECT ID, Category FROM CategoryC");
+
+    var PriceCommand = "SELECT ID, Price FROM CategoryC";
+    var PriceData = db.Query(PriceCommand);
+
+
+    if(IsPost && Validation.IsValid()){
+        ProductName = Request.Form["ProductName"];
+        Category = Request.Form["ListCategory"];
+        Price = Request.Form["Price"];
+        PurchasePrice = Request.Form["PurchasePrice"];
+        Stock = Request.Form["Stock"];
+
+    var insertCommand = "INSERT INTO Products (ProductName, Category, Price, PurchasePrice, Stock) VALUES(@0, @1, @2, @3, @4)";
+        db.Execute(insertCommand, ProductName, Category, Price, PurchasePrice, Stock);
+        <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
+        Response.Redirect("~/Members/Products");}
+}
+    <!--The style section contains yellow boxes for error messages to stand out-->
+  <h1>Add a product</h1>
+  <form method="post">
+    <fieldset><!--Creates the form to enter in new data to the database-->
+      <legend>Add product to database</legend>
+      <p><label for="ProductName">Product Name:</label>
+         <input type="text" name="ProductName" value="@Request.Form["ProductName"]" />
+          @Html.ValidationMessage("ProductName")
+      </p>
+
+
+<!--
+      <p><label for="Category">Category:</label>
+         <input type="text" name="Category" value=" Husk razor//Request.Form["Category"]" />
+         Husk razor// Html.ValidationMessage("Category")
+      </p>
+-->
+             <p><label for="Category">Category:</label>
+<form name="FormCategory" method="post">
+  <select name="ListCategory">
+            @foreach(var row in CategoryData)
+            {
+                <option value="@row.Category">@row.Category</option>
+            }
+   </select>
+</form>      
+
+      <p><label for="Price">Price:</label>
+         <input type="number" name="Price" value="@Request.Form["Price"]" />
+
+          @Html.ValidationMessage("Price")
+      </p>
+
+      <p><label for="PurchasePrice">Purchase Price:</label>
+         <input type="number" name="PurchasePrice" value="@Request.Form["PurchasePrice"]" />
+          @Html.ValidationMessage("PurchasePrice")
+      </p>
+
+      <p><label for="Stock">Stock:</label>
+         <input type="number" name="Stock" value="@Request.Form["Stock"]" />
+          @Html.ValidationMessage("Stock")
+      </p>
+
+      <p><input type="submit" name="buttonSubmit" value="Add product" /></p>
+    </fieldset>
+  </form>
+    <p>
+        <a href="~/Members/Products.cshtml">Return to product listings</a>
+    </p>
