@@ -7,6 +7,7 @@
     <link href="~/Styles/Products.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8" />
      <style type="text/css">
+
     .field-validation-error {
       font-weight:bold;
       color:red;
@@ -19,10 +20,11 @@
       font-weight:bold;
       margin:12px;
     }
-         
+                 
      ul {
     list-style-type: none;
     margin: 0;
+    width: 81.1%;
     padding: 0;
     overflow: hidden;
     background-color: #333;
@@ -60,11 +62,11 @@
          <h1>Cafeen's inventory</h1>
         </div>
         <ul>
-                <li class="active"><a href="@Href("~/index")">Home</a></li>
-                <li class="active"><a href="@Href("~/Members/Products")">Inventory List</a></li>
-                <li class="active"><a href="@Href("~/Members/AddToDatabase")">Add new product</a></li>
-                <li class="active"><a href="@Href("~/Members/Contact")">Contact</a></li>
-                <li class="active"><a href="@Href("~/logout")">Logout</a></li>
+                <li><a href="@Href("~/index")">Home</a></li>
+                <li><a href="@Href("~/Members/Products")">Inventory List</a></li>
+                <li><a href="@Href("~/Members/AddToDatabase")">Add new product</a></li>
+                <li><a href="@Href("~/Members/Contact")">Contact</a></li>
+                <li style="float:right"><a href="@Href("~/logout")">Logout</a></li>
         </ul>
         <!--style="float:right">-->
         <div id="main">

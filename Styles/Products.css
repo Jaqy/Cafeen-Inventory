@@ -1,11 +1,15 @@
 html{ height:100%; margin:0; padding:0; }
 
+
+
 body {
   height:60%;
   font-family:'Trebuchet MS',  'Arial', 'Helvetica', 'sans-serif';
   font-size:10pt;
-  background-color: LightGray;
+  background-color: #a1bad1;
   line-height:1.6em;
+  background-image: url(Images/pattern.jpg);
+  background-repeat: repeat-x;   
 }
 
 h1{ font-size:1.6em; }
