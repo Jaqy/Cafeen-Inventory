@@ -33,9 +33,11 @@
       you will instead delete the whole database-->
         if(IsPost && !Request["buttonDelete"].IsEmpty()){
         ProductID = Request.Form["ProductID"];
+        Funcs.DeleteProduct(ProductID);
+        @*
         var db = Database.Open("Cafeen");
         var deleteCommand = "DELETE FROM Products WHERE ID = @0";
-        db.Execute(deleteCommand, ProductID);
+        db.Execute(deleteCommand, ProductID);*@
         Response.Redirect("~/Members/Products");
     }
 }

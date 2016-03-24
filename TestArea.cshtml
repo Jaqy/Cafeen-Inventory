@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.title = "TestArea";
+
+
+}
+
+
+@if(IsPost){
+    Funcs.AddNewProduct("Jolly", "Sodavand", 12.00, 8.00, 120);
+}
+
+<form action="TestArea.cshtml" method="post">
+  something: <input type="text" name="enter name"><br>
+  <input type="submit" name="TestSubmit" value="Add product" />
+</form>
+
+
