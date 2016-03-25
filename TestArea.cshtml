@@ -2,17 +2,70 @@
     Layout = "~/_Layout.cshtml";
     Page.title = "TestArea";
 
+    var db = Database.Open("Cafeen");
 
+    string msg = "Is the product in the table?: ";
+    string SearchWord = "TestName";
+    string ProductID = "";
+
+    if(!IsPost){
+        if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
+        {
+            msg += "Yes ";
+        }
+        else
+        {
+            msg += "No ";
+        }
+
+        Funcs.AddNewProduct("TestName", "Sodavand", 12.00, 8.00, 120);
+
+        if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
+        {
+            msg += "Is the product in the table after insertion?: Yes ";
+        }
+        else
+        {
+            msg += "Is the product in the table after insertion?: No ";
+        }
+
+        ProductID = db.QueryValue("SELECT ID FROM Products WHERE ProductName = '"+ SearchWord + "'").ToString();
+
+        Funcs.EditProduct("TestName", "TestCategory", 12.00, 8.00, 120, ProductID);
+
+        if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE Category = 'TestCategory'") > 0)
+        {
+            msg += "Has the product been changed?: Yes ";
+        }
+        else
+        {
+            msg += "Has the product been changed?: No ";
+        }
+
+        Funcs.DeleteProduct(ProductID);
+
+        if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
+        {
+            msg += "Has the product been deleted?: No ";
+        }
+        else
+        {
+            msg += "Has the product been deleted?: Yes ";
+        }
+    }
 }
 
+<p>@msg</p>    
+<p>@ProductID</p>  
+  
 
-@if(IsPost){
-    Funcs.AddNewProduct("Jolly", "Sodavand", 12.00, 8.00, 120);
-}
 
+
+
+@*
 <form action="TestArea.cshtml" method="post">
   something: <input type="text" name="enter name"><br>
   <input type="submit" name="TestSubmit" value="Add product" />
 </form>
-
+*@
 

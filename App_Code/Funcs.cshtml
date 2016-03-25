@@ -6,7 +6,6 @@
     {  
         var db = Database.Open("Cafeen");  
         db.Execute("INSERT INTO Products (ProductName, Category, Price, PurchasePrice, Stock) VALUES(@0, @1, @2, @3, @4)", ProductName, Category, Price, PurchasePrice, Stock); 
-        Response.Redirect("~/Members/Products");
     }   
     
     
@@ -14,7 +13,7 @@
     {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET ProductName=@0, Category=@1, Price=@2, PurchasePrice=@3, Stock=@4 WHERE ID=@5", ProductName, Category, Price, PurchasePrice, Stock, ProductID);
-        Response.Redirect("~/Members/Products.cshtml");
+
     }     
 
     public static void DeleteProduct(string ProductID)
