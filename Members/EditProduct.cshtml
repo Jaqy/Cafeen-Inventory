@@ -47,20 +47,21 @@
 
         ProductName = Request.Form["ProductName"];
         Category = Request.Form["Category"];
-        Price = Request.Form["Price"].AsInt();
-        PurchasePrice = Request.Form["PurchasePrice"].AsInt();
+        Price = Convert.ToDouble(Request.Form["Price"]);
+        PurchasePrice = Convert.ToDouble(Request.Form["PurchasePrice"]);
         Stock = Request.Form["Stock"].AsInt();
         ProductID = Request.Form["ProductID"];
 
         <!--Opens the database and updates the product information, the WHERE secures that it is only the ID that is updatet and not the whole database-->
         if(Validation.IsValid()){
-            var db = Database.Open("Cafeen");
-            var updateCommand = "UPDATE Products SET ProductName=@0, Category=@1, Price=@2, PurchasePrice=@3, Stock=@4 WHERE ID=@5";
-            db.Execute(updateCommand, ProductName, Category, Price, PurchasePrice, Stock, ProductID);
+            Funcs.EditProduct(ProductName, Category, Price, PurchasePrice, Stock, ProductID);
             Response.Redirect("~/Members/Products.cshtml");
-       }
+        }
     }
 }
+
+
+
 <!--Creates the new tables and positions the validation error message to the end of every line-->
   <h1>Edit a Product</h1>
   <form method="post">
@@ -91,7 +92,7 @@
          @Html.ValidationMessage("Stock")
       </p>
 
-      <!--Gives the movie a hidden ID to be used to restore information about the ID from the database-->
+      <!--Gives the product a hidden ID to be used to restore information about the ID from the database-->
       <input type="hidden" name="ProductID" value="@ProductID" />
 
       <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
