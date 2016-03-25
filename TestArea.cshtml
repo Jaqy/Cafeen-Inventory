@@ -4,18 +4,18 @@
 
     var db = Database.Open("Cafeen");
 
-    string msg = "Is the product in the table?: ";
+    string msg = "Is the product missing from the table?: ";
     string SearchWord = "TestName";
     string ProductID = "";
 
     if(!IsPost){
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {
-            msg += "Yes ";
+            msg += "No ";
         }
         else
         {
-            msg += "No ";
+            msg += "Yes ";
         }
 
         Funcs.AddNewProduct("TestName", "Sodavand", 12.00, 8.00, 120);
@@ -64,7 +64,7 @@
 
 @*
 <form action="TestArea.cshtml" method="post">
-  something: <input type="text" name="enter name"><br>
+  something: <input type="text" name="enter name">
   <input type="submit" name="TestSubmit" value="Add product" />
 </form>
 *@
