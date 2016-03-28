@@ -1,0 +1,38 @@
+﻿@{
+    Page.title = "Add Product";
+    var Category = "";
+    var Price = "";
+
+        <!--Opens the database and inserts the data from above-->
+    var db = Database.Open("Cafeen");
+        <!--Collect the Category from the Database-->
+    var CategoryData = db.Query("SELECT ID, Category FROM CategoryC");
+    var PriceData = db.Query("SELECT ID, Price FROM CategoryC");
+
+    if(IsPost){
+        Category = Request.Form["Category"];
+        Price = Request.Form["Price"];
+        
+    var insertCommand = "INSERT INTO Category (Category, Price) VALUES(@0, @1)";
+        db.Execute(Category, Price);
+        <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
+        Response.Redirect("~/Members/Products");}
+}
+
+
+      <p><label for="Category">Category:</label>
+   
+      <p><label for="Category">Category name:</label>
+         <input type="text" name="Category" value="@Request.Form["Price"]" />
+      </p>
+
+      <p><label for="Price">Price:</label>
+         <input type="number" name="Price" value="@Request.Form["Price"]" />
+      </p>
+
+      <p><input type="submit" name="buttonSubmit" value="Add Category" /></p>
+    </fieldset>
+  </form>
+    <p>
+        <a href="~/Members/Products.cshtml">Return to product listings</a>
+    </p>
