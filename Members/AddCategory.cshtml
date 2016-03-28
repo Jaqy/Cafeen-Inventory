@@ -1,7 +1,7 @@
 ﻿@{
-    Page.title = "Add Product";
+    Page.title = "Add Category";
     var Category = "";
-    var Price = "";
+    double Price = 0.0;
 
         <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
@@ -11,14 +11,14 @@
 
     if(IsPost){
         Category = Request.Form["Category"];
-        Price = Request.Form["Price"];
-        
-    var insertCommand = "INSERT INTO Category (Category, Price) VALUES(@0, @1)";
-        db.Execute(Category, Price);
+        Price = Convert.ToDouble(Request.Form["Price"]);
+        Funcs.AddCategory(Category, Price);    
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
-        Response.Redirect("~/Members/Products");}
+        Response.Redirect("~/Members/Products.cshtml");
+        }
 }
-
+  <form method="post">
+    <fieldset>
 
       <p><label for="Category">Category:</label>
    
