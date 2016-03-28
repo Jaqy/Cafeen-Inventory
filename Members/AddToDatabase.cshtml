@@ -7,12 +7,13 @@
     Validation.RequireField("Price", "You haven't entered a Price");
     Validation.RequireField("PurchasePrice", "You haven't entered a Purchase Price");
     Validation.RequireField("Stock", "You haven't entered Stock");
-    <!--Checks if the button is being pressed, and if it is pressed Request.Form gets the data from the boxes-->
+
+    //Indlæser de variable der er relevante for tilføjelse af nyt produkt. 
     var ProductName = "";
     var Category = "";
-    var Price = "";
-    var PurchasePrice = "";
-    var Stock = "";
+    double Price = 0.0;
+    double PurchasePrice = 0.0;
+    double Stock = 0.0;
 
           <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
@@ -22,16 +23,15 @@
     var PriceCommand = "SELECT ID, Price FROM CategoryC";
     var PriceData = db.Query(PriceCommand);
 
-
+    //Følgende if-sætning hånterer når siden genindlæses efter tryk på submit-knappen. Produkt tilføjes hvis input er valide.
     if(IsPost && Validation.IsValid()){
         ProductName = Request.Form["ProductName"];
         Category = Request.Form["ListCategory"];
-        Price = Request.Form["Price"];
-        PurchasePrice = Request.Form["PurchasePrice"];
-        Stock = Request.Form["Stock"];
+        Price = Convert.ToDouble(Request.Form["Price"]);
+        PurchasePrice = Convert.ToDouble(Request.Form["PurchasePrice"]);
+        Stock = Convert.ToDouble(Request.Form["Stock"]);
+        Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
 
-    var insertCommand = "INSERT INTO Products (ProductName, Category, Price, PurchasePrice, Stock) VALUES(@0, @1, @2, @3, @4)";
-        db.Execute(insertCommand, ProductName, Category, Price, PurchasePrice, Stock);
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");}
 }
@@ -52,7 +52,7 @@
          Husk razor// Html.ValidationMessage("Category")
       </p>
 -->
-             <p><label for="Category">Category:</label>
+    <p><label for="Category">Category:</label></p>
 <form name="FormCategory" method="post">
   <select name="ListCategory">
             @foreach(var row in CategoryData)
