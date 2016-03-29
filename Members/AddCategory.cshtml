@@ -6,8 +6,8 @@
         <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
         <!--Collect the Category from the Database-->
-    var CategoryData = db.Query("SELECT ID, Category FROM CategoryC");
-    var PriceData = db.Query("SELECT ID, Price FROM CategoryC");
+    var CategoryData = db.Query("SELECT ID, Category FROM Category");
+    var PriceData = db.Query("SELECT ID, Price FROM Category");
 
     if(IsPost){
         Category = Request.Form["Category"];
@@ -36,3 +36,9 @@
     <p>
         <a href="~/Members/Products.cshtml">Return to product listings</a>
     </p>
+
+<!--
+        <p>
+         <a href="~/Members/AddToDatabase.cshtml">Add a new product</a>
+        </p>
+-->
