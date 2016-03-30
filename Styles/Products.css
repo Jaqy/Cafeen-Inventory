@@ -6,11 +6,12 @@ body {
   height:60%;
   font-family:'Trebuchet MS',  'Arial', 'Helvetica', 'sans-serif';
   font-size:10pt;
-  background-color: #a1bad1;
-  line-height:1.6em;
-  background-image: url(Images/pattern.jpg);
-  background-repeat: repeat-x;   
+  line-height: 1.6em;
+  background-image: url("/Images/c10.jpg");
+  background-position: center;
+  background-size: contain;
 }
+
 
 h1{ font-size:1.6em; }
 h2{ font-size:1.4em; }
