@@ -17,13 +17,13 @@
         Response.Redirect("~/Members/Products.cshtml");
         }
 }
+<h2>Add a category</h2>
   <form method="post">
     <fieldset>
-
-      <p><label for="Category">Category:</label>
+        <legend>Add a new category to the database</legend>
    
       <p><label for="Category">Category name:</label>
-         <input type="text" name="Category" value="@Request.Form["Price"]" />
+         <input type="text" name="Category" value="@Request.Form["Category"]" />
       </p>
 
       <p><label for="Price">Price:</label>
@@ -37,8 +37,36 @@
         <a href="~/Members/Products.cshtml">Return to product listings</a>
     </p>
 
-<!--
-        <p>
-         <a href="~/Members/AddToDatabase.cshtml">Add a new product</a>
-        </p>
--->
+
+<script>
+    $(document).ready(function () {
+        $('.CategoryDelete').hide()
+        $('#CheckboxCategory').change(function () {
+            if (!this.checked)
+                $('.CategoryDelete').hide();
+            else
+                $('.CategoryDelete').show();
+                
+        });
+    });
+</script>
+
+  <form ID="CategoryDeleteForm" method="post">
+    <h2>Delete a category <input type="checkbox" name="CheckboxCategory" ID="CheckboxCategory"></h2>
+    <fieldset class="CategoryDelete" id="CategoryDelete">
+        <legend>Delete a category from the database</legend>
+
+            <label for="Category">Category:</label>
+                <form name="FormCategory" method="post">
+                    <select name="ListCategory">
+            @foreach(var row in CategoryData)
+            {
+                <option value="@row.Category">@row.Category</option>
+            }
+   </select>
+</form> 
+
+      <p><input type="submit" name="buttonSubmit" value="Delete Category" /></p>
+
+    </fieldset>
+  </form>

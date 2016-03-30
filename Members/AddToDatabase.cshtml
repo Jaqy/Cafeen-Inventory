@@ -85,30 +85,28 @@
         <a href="~/Members/Products.cshtml">Return to product listings</a>
     </p>
 
+<!--
 <script>
     $(document).ready(function () {
-        $('#CategoryHide').hide()
+        $('.CategoryHide').hide()
         $('#CheckboxCategory').change(function () {
-            if (this.checked)
-                $('#CategoryHide').show();
+            if (!this.checked)
+                $('.CategoryHide').hide();
             else
-                $('#CategoryHide').hide();
+                $('.CategoryHide').show();
                 
         });
     });
 </script>
 
-<form method="get">
-<input type="checkbox" ID="CheckboxCategory"> Add or delete a category
-</form>
-
 
   <form ID="CategoryHide" method="post">
     <h2>Add Category</h2>
-    <fieldset>
-
+    <input type="checkbox" ID="CheckboxCategory"> Add or delete a category
+    <fieldset class="CategoryHide" id="CategoryHide">
+        <legend>Add a  new category to the database</legend>
       <p><label for="Category">Category:</label>
-   
+        </tr>
       <p><label for="Category">Category name:</label>
          <input type="text" name="Category" value="@Request.Form["Price"]" />
       </p>
@@ -118,5 +116,16 @@
       </p>
 
       <p><input type="submit" name="buttonSubmit" value="Add Category" /></p>
+
     </fieldset>
   </form>
+
+
+<form>
+<table>
+<tr class="CategoryHide"><td><input type="text" name="Category" value="@Request.Form["Price"]" /></td></tr>
+<tr class="CategoryHide"><td><input type="number" name="Price" value="@Request.Form["Price"]" /></td></tr>
+<tr class="CategoryHide"><td>data3</td></tr>
+</table>
+</form>
+-->
