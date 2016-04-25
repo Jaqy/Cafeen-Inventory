@@ -25,7 +25,7 @@
      ul {
     list-style-type: none;
     margin: 0;
-    width: 81.8%;
+    width: 100%;
     padding: 0;
     overflow: hidden;
     background-color: #333;
@@ -62,6 +62,7 @@
         <div id="header">
          <h1>Cafeen's inventory</h1>
         </div>
+        <div id="main">
         <ul>
                 <li><a href="@Href("~/index")">Home</a></li>
                 <li><a href="@Href("~/Members/Products")">Inventory List</a></li>
@@ -77,6 +78,7 @@
                     <li style="float:right"><a href="@Href("~/login")">Login</a></li>
                 }
         </ul>
+        </div>
         <!--style="float:right">-->
         <div id="main">
           @RenderBody()
