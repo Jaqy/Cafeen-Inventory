@@ -9,7 +9,7 @@ body {
   line-height:1.6em;
   //background-color: #a1bad1;
   background-image: url("/Images/1.jpg");
-  background-size: contain;   
+  background-size: auto;   
 }
 
 h1{ font-size:1.6em; }
