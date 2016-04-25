@@ -24,7 +24,7 @@
 
     public static void AddCategory(string Category, double Price){
         var db = Database.Open("Cafeen");
-        db.Execute("INSERT INTO Category (Category, Price) VALUES(@0, @1)", Category, Price);
+        db.Execute("INSERT INTO CategoryC (Category, Price) VALUES(@0, @1)", Category, Price);
     }
 
     public static void DeleteCategory(string CategoryID)
@@ -33,4 +33,8 @@
         db.Execute("DELETE FROM Category WHERE ID = @0", CategoryID);
     }
     
+    public static void AddLogData(){
+        var db = Database.Open("Cafeen");
+        db.Execute("INSERT INTO Logs (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
+        }
 }
