@@ -10,11 +10,19 @@
     var PriceData = db.Query("SELECT ID, Price FROM Category");
 
     if(IsPost){
+        if (Request.Form["CheckboxCategory"].checked)
+        {
         Category = Request.Form["Category"];
         Price = Convert.ToDouble(Request.Form["Price"]);
         Funcs.AddCategory(Category, Price);    
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products.cshtml");
+        }
+        else
+        {
+            
+        } 
+
         }
 }
 <h2>Add a category</h2>
@@ -66,7 +74,7 @@
    </select>
 </form> 
 
-      <p><input type="submit" name="buttonSubmit" value="Delete Category" /></p>
+      <p><input type="submit" id="DeleteCategory" name="buttonSubmit" value="Delete Category" /></p>
 
     </fieldset>
   </form>
