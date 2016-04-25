@@ -1,7 +1,7 @@
 ﻿@{
     var db = Database.Open("Cafeen") ;
     var dbdata = db.Query("SELECT ProductName, Stock FROM Products"); 
-    var MyChart = new Chart(width: 1400, height: 400, theme: ChartTheme.Blue) 
+    var MyChart = new Chart(width: 800, height: 400, theme: ChartTheme.Blue) 
             .AddTitle("Product Stock") 
             .DataBindTable(dataSource: dbdata, xField: "ProductName") 
             .Write();   

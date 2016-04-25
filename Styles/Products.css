@@ -7,9 +7,10 @@ body {
   font-family:'Trebuchet MS',  'Arial', 'Helvetica', 'sans-serif';
   font-size:10pt;
   line-height:1.6em;
-  //background-color: #a1bad1;
+  background-color: #a1bad1;
   background-image: url("/Images/1.jpg");
-  background-size: contain;   
+  background-size: auto;
+     
 }
 
 h1{ font-size:1.6em; }
