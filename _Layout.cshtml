@@ -5,6 +5,7 @@
   <head>
     <title>@Page.title</title>
     <link href="~/Styles/Products.css" rel="stylesheet" type="text/css" />
+      <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <meta charset="utf-8" />
      <style type="text/css">
 
@@ -65,8 +66,10 @@
                 <li><a href="@Href("~/index")">Home</a></li>
                 <li><a href="@Href("~/Members/Products")">Inventory List</a></li>
                 <li><a href="@Href("~/Members/AddToDatabase")">Add new product</a></li>
+                <li><a href="@Href("~/Members/AddCategory")">Add new category</a></li>
+                <li><a href="@Href("~/Members/Charts")">Charts</a></li>
                 <li><a href="@Href("~/Members/Contact")">Contact</a></li>
-                @if(WebSecurity.IsAuthenticated){
+                 @if(WebSecurity.IsAuthenticated){
                     <li style="float:right"><a href="@Href("~/logout")">Logout</a></li>
                 }
                 else{
@@ -83,4 +86,3 @@
     </div>
   </body>
 </html>
-

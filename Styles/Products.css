@@ -6,14 +6,15 @@ body {
   height:60%;
   font-family:'Trebuchet MS',  'Arial', 'Helvetica', 'sans-serif';
   font-size:10pt;
-  background-color: #a1bad1;
   line-height:1.6em;
-  background-image: url(Images/pattern.jpg);
-  background-repeat: repeat-x;   
+  //background-color: #a1bad1;
+  background-image: url("/Images/1.jpg");
+  background-size: contain;   
 }
 
 h1{ font-size:1.6em; }
 h2{ font-size:1.4em; }
+
 
 #container{
    min-height:100%;
@@ -41,6 +42,10 @@ h2{ font-size:1.4em; }
   padding:8px;
   margin-top:-2em;
   background-color:LightGray;
+}
+
+#mycharts{
+    text-align: center;
 }
 
 .head { background-color: #E8E8E8; font-weight: bold; color: #FFF; }
