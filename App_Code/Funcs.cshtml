@@ -35,6 +35,6 @@
     
     public static void AddLogData(){
         var db = Database.Open("Cafeen");
-        db.Execute("INSERT INTO Logs (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
+        db.Execute("INSERT INTO Log (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
         }
 }
