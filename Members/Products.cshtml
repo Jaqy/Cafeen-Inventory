@@ -18,6 +18,9 @@
 }
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Category", rowsPerPage:10);
+
+
+
 }
 
     <h2>Inventory List</h2>
@@ -51,13 +54,4 @@
             )
         )
     </div>
-        <!--Creates a shortcut to the AddToDatabase tab-->
-        <p>
-         <a href="~/Members/AddToDatabase.cshtml">Add a new product</a>
-        </p>
-        <p>
-         <a href="~/Members/AddCategory.cshtml">Add a new category</a>
-        </p>
 
-
-<p><a href="~/index">Go back to homepage</a></p>
