@@ -37,4 +37,6 @@
         var db = Database.Open("Cafeen");
         db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
         }
+
+
 }

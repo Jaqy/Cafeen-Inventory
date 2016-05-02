@@ -11,6 +11,7 @@
     //Indlæser de variable der er relevante for tilføjelse af nyt produkt. 
     var ProductName = "";
     var Category = "";
+    var AltCategory = "";
     double Price = 0.0;
     double PurchasePrice = 0.0;
     double Stock = 0.0;
@@ -18,25 +19,32 @@
           <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
         <!--Collect the Category from the Database-->
-    var CategoryData = db.Query("SELECT ID, Category FROM Category");
+    var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
     var PriceCommand = "SELECT ID, Price FROM Category";
     var PriceData = db.Query(PriceCommand);
+
+    var Checkbox_value =(Request["altCategory_checkbox"]=="on") ? true : false;
 
     //Følgende if-sætning hånterer når siden genindlæses efter tryk på submit-knappen. Produkt tilføjes hvis input er valide.
     if(IsPost && Validation.IsValid()){
         ProductName = Request.Form["ProductName"];
         Category = Request.Form["ListCategory"];
+        AltCategory = Request.Form["AltCategory"];
         Price = Convert.ToDouble(Request.Form["Price"]);
         PurchasePrice = Convert.ToDouble(Request.Form["PurchasePrice"]);
         Stock = Convert.ToDouble(Request.Form["Stock"]);
-        Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
-
+        if(Checkbox_value = true){
+            Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
+        }
+        else{
+            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock);
+        }
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");}
 }
     <!--The style section contains yellow boxes for error messages to stand out-->
-  <h1>Add a product</h1>
+  <h1>Add a product @(Checkbox_value)</h1>
   <form method="post">
     <fieldset><!--Creates the form to enter in new data to the database-->
       <legend>Add product to database</legend>
@@ -60,7 +68,23 @@
                 <option value="@row.Category">@row.Category</option>
             }
    </select>
-</form>      
+</form>  
+        
+        
+   <div>
+    <input type="checkbox" name="altCategory_checkbox" id="altCategory_checkbox">
+    <label for="altCategory_checkbox">Add new category?</label>
+
+    <div class="reveal-if-active">
+      <p><label for="Price">New category:</label>
+         <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
+
+      </p>
+    </div>
+  </div>     
+        
+        
+            
         </p>
       <p><label for="Price">Price:</label>
          <input type="number" name="Price" value="@Request.Form["Price"]" />
