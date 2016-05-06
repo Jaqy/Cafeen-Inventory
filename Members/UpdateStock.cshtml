@@ -1,0 +1,68 @@
+﻿@{
+    Page.title = "Edit Product";
+    <!--When the site is shown for the first time, it gets the ProductID form the query string, 
+    the code then uses the ID to read the corresponding product out of the database -->
+    var ProductID = "";
+    double Stock = 0.0;
+    var ProductName = "";
+
+   if(!IsPost)
+   {
+               <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
+        if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
+         {
+            ProductID = Request.QueryString["ID"];
+            var db = Database.Open("Cafeen");
+            var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+            var rows = db.QuerySingle(dbCommand, ProductID);
+                        <!--if the row is equal to null skip then we skip because we will get an error if we try and get informaiton out of an empty row.-->
+            if(rows != null)
+            {
+                ProductName = rows.ProductName;
+                Stock = rows.Stock;
+            } 
+              else 
+            {
+                Validation.AddFormError("No Product was found for that ID.");
+            }
+          }
+        else{
+            Validation.AddFormError("No Product was selected.");
+        }
+    }
+
+    if(IsPost){ <!--If the update product button is pressed, we require all 4 fields full, and then request whats inside the tables.-->
+ 
+        Validation.RequireField("Stock", "You haven't entered a Stock number");
+        Validation.RequireField("ProductID", "No product ID was submitted!");
+
+
+        Stock = Request.Form["Stock"].AsInt();
+        ProductID = Request.Form["ProductID"];
+
+        <!--Opens the database and updates the product information, the WHERE secures that it is only the ID that is updatet and not the whole database-->
+        if(Validation.IsValid()){
+            Funcs.UpdateStock(Stock, ProductID);
+            Response.Redirect("~/Members/CountNew.cshtml");
+        }
+    }
+}
+
+
+  <form method="post">
+    <fieldset>
+      <legend>Update Stock for @ProductName</legend>
+      <p><label for="Stock">Stock:</label>
+         <input type="number" name="Stock" value="@Stock"/>
+         @Html.ValidationMessage("Stock")
+      </p>
+
+      <!--Gives the product a hidden ID to be used to restore information about the ID from the database-->
+      <input type="hidden" name="ProductID" value="@ProductID" />
+
+      <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
+    </fieldset>
+  </form>
+    <p>
+        <a href="~/Members/CountNew.cshtml">Return to Inventory Count</a>
+    </p>
