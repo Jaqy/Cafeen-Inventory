@@ -60,14 +60,14 @@
   <body>
     <div id="container">
         <div id="header">
-         <h1>Cafeen's inventory</h1>
+        <img src="~/Links/logo.png" alt="Cafeen Logo" style="width: 128px; height: 128px">
         </div>
         <div id="main">
         <ul>
                 <li><a href="@Href("~/index")">Home</a></li>
                 <li><a href="@Href("~/Members/Products")">Inventory List</a></li>
                 <li><a href="@Href("~/Members/AddToDatabase")">Add new product</a></li>
-                <li><a href="@Href("~/Members/Count")">Perform Inventory Count</a></li>
+                <li><a href="@Href("~/Members/CountNew")">Inventory Count</a></li>
                 <li><a href="@Href("~/Members/Charts")">Charts</a></li>
                 <li><a href="@Href("~/Members/Contact")">Contact</a></li>
                  @if(WebSecurity.IsAuthenticated){

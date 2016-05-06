@@ -16,6 +16,12 @@
 
     }     
 
+    public static void UpdateStock(double Stock, string ProductID)
+    {
+        var db = Database.Open("Cafeen");
+        db.Execute("UPDATE Products SET Stock=@0  WHERE ID=@1", Stock, ProductID);
+
+    } 
     public static void DeleteProduct(string ProductID)
     {
         var db = Database.Open("Cafeen");

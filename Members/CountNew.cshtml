@@ -1,0 +1,35 @@
+﻿@{
+    Page.title = "Count"; 
+
+    var db = Database.Open("Cafeen") ;
+    var selectCommand = "SELECT * FROM Products";
+    var searchTerm = "";
+    var selectedData = db.Query(selectCommand, searchTerm);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Category");
+
+    if(IsPost){
+        Funcs.AddLogData(); //Hvis siden genfriskes vha. af submit, da tilføjes data'en fra Products tabellen til Logs tabellen.
+        Response.Redirect("~/Members/Products.cshtml");
+    }
+
+}
+    <h2>Inventory List</h2>
+    <h3>Date: @DateTime.Now</h3>
+        <!--Adds the coloumns that shows the database, + the edit link to update the database-->
+    <div>
+        @grid.GetHtml(
+            tableStyle: "grid",
+            headerStyle: "head",
+            alternatingRowStyle: "alt",
+            columns: grid.Columns(
+                grid.Column("ProductName"),
+                grid.Column("Category"),
+                grid.Column("Stock"),
+                grid.Column(format: @<a href="~/Members/UpdateStock?id=@item.ID">Edit</a>)
+            )
+        )
+    </div>
+
+    <form method="post"><!--Button for submitting days count. Calls function that moves data from Products table to Logs table-->
+            <input type="Submit" value="Save Count" />
+    </form>
