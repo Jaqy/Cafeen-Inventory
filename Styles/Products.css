@@ -48,6 +48,19 @@ h2{ font-size:1.4em; }
     text-align: center;
 }
 
+.reveal-if-active {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+input[type="radio"]:checked ~ .reveal-if-active,
+input[type="checkbox"]:checked ~ .reveal-if-active {
+  opacity: 1;
+  max-height: 100px; /* little bit of a magic number :( */
+  overflow: visible;
+}
+
 .head { background-color: #E8E8E8; font-weight: bold; color: #FFF; }
 .grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }
 .alt { background-color: #E8E8E8; color: #000; }

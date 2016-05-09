@@ -9,8 +9,6 @@
     string ProductID = "";
 
 
-    Funcs.AddLogData();
-
     if(!IsPost){
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {

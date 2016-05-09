@@ -13,8 +13,18 @@
     {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET ProductName=@0, Category=@1, Price=@2, PurchasePrice=@3, Stock=@4 WHERE ID=@5", ProductName, Category, Price, PurchasePrice, Stock, ProductID);
+    }
+    
+    
+    public static void EditProduct(string Category, string NewCategory, double NewPrice)  {
+        var db = Database.Open("Cafeen");
+        db.Execute("UPDATE Products SET Category=@1, Price=@2 WHERE Category=@0", Category, NewCategory, NewPrice);
+    }   
 
-    }     
+    public static void EditProduct(string Category, string NewCategory)  {
+        var db = Database.Open("Cafeen");
+        db.Execute("UPDATE Products SET Category=@1 WHERE Category=@0", Category, NewCategory);
+    }   
 
     public static void UpdateStock(double Stock, string ProductID)
     {
@@ -43,4 +53,6 @@
         var db = Database.Open("Cafeen");
         db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
         }
+
+
 }

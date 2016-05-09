@@ -11,6 +11,7 @@
     //Indlæser de variable der er relevante for tilføjelse af nyt produkt. 
     var ProductName = "";
     var Category = "";
+    var AltCategory = "";
     double Price = 0.0;
     double PurchasePrice = 0.0;
     double Stock = 0.0;
@@ -18,20 +19,26 @@
           <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
         <!--Collect the Category from the Database-->
-    var CategoryData = db.Query("SELECT ID, Category FROM Category");
+    var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
     var PriceCommand = "SELECT ID, Price FROM Category";
     var PriceData = db.Query(PriceCommand);
 
     //Følgende if-sætning hånterer når siden genindlæses efter tryk på submit-knappen. Produkt tilføjes hvis input er valide.
-    if(IsPost && Validation.IsValid()){
+    if(IsPost){
         ProductName = Request.Form["ProductName"];
-        Category = Request.Form["ListCategory"];
+        Category = Request["ListCategory"];
+        AltCategory = Request["AltCategory"];
         Price = Convert.ToDouble(Request.Form["Price"]);
         PurchasePrice = Convert.ToDouble(Request.Form["PurchasePrice"]);
         Stock = Convert.ToDouble(Request.Form["Stock"]);
-        Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
-
+        bool CategoryCheckbox = Request["CategoryCheckbox"].AsBool();
+        if(CategoryCheckbox){
+            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
+        }
+        else{
+            Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock);
+        }
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");}
 }
@@ -60,7 +67,24 @@
                 <option value="@row.Category">@row.Category</option>
             }
    </select>
-</form>      
+</form>  
+        
+        
+  <div>
+    @Html.CheckBox("CategoryCheckbox", new { value = "true" })
+    <label for="CategoryCheckbox">Add new category?</label>
+
+
+    <div class="reveal-if-active">
+      <p><label for="Price">New category:</label>
+         <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
+
+      </p>
+    </div>
+  </div>     
+        
+        
+            
         </p>
       <p><label for="Price">Price:</label>
          <input type="number" name="Price" value="@Request.Form["Price"]" />
@@ -81,48 +105,3 @@
       <p><input type="submit" name="buttonSubmit" value="Add product" /></p>
     </fieldset>
   </form>
-
-<!--
-<script>
-    $(document).ready(function () {
-        $('.CategoryHide').hide()
-        $('#CheckboxCategory').change(function () {
-            if (!this.checked)
-                $('.CategoryHide').hide();
-            else
-                $('.CategoryHide').show();
-                
-        });
-    });
-</script>
-
-
-  <form ID="CategoryHide" method="post">
-    <h2>Add Category</h2>
-    <input type="checkbox" ID="CheckboxCategory"> Add or delete a category
-    <fieldset class="CategoryHide" id="CategoryHide">
-        <legend>Add a  new category to the database</legend>
-      <p><label for="Category">Category:</label>
-        </tr>
-      <p><label for="Category">Category name:</label>
-         <input type="text" name="Category" value="@Request.Form["Price"]" />
-      </p>
-
-      <p><label for="Price">Price:</label>
-         <input type="number" name="Price" value="@Request.Form["Price"]" />
-      </p>
-
-      <p><input type="submit" name="buttonSubmit" value="Add Category" /></p>
-
-    </fieldset>
-  </form>
-
-
-<form>
-<table>
-<tr class="CategoryHide"><td><input type="text" name="Category" value="@Request.Form["Price"]" /></td></tr>
-<tr class="CategoryHide"><td><input type="number" name="Price" value="@Request.Form["Price"]" /></td></tr>
-<tr class="CategoryHide"><td>data3</td></tr>
-</table>
-</form>
--->
