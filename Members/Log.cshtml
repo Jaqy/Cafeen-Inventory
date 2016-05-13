@@ -9,14 +9,14 @@
 
     var selectCommand = "SELECT * FROM logistics";
   
-    if (!Request.QueryString["StartDate"].IsEmpty() ) {
+    if (!Request.QueryString["StartDate"].IsEmpty() && !Request.QueryString["EndDate"].IsEmpty()) {
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
         selectCommand ="SELECT * FROM logistics WHERE Date >= @0 AND Date <= @1";
     }
 
     var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End);
-    var grid = new WebGrid(source: SelectedData, defaultSort: "Stock", rowsPerPage:50);
+    var grid = new WebGrid(source: SelectedData, defaultSort: "Date", rowsPerPage:50);
 }
 
 <h1>Search for Log files</h1>
