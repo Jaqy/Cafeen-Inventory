@@ -1,0 +1,69 @@
+﻿@{
+
+    Page.title = "Contact";
+
+    var db = Database.Open("Cafeen");
+
+    var searchTerm_Start = "";
+    var searchTerm_End = "";
+
+    var selectCommand = "SELECT * FROM logistics";
+  
+    if (!Request.QueryString["StartDate"].IsEmpty() && !Request.QueryString["EndDate"].IsEmpty()) {
+        searchTerm_Start = Request["StartDate"];
+        searchTerm_End = Request["EndDate"];
+        selectCommand ="SELECT * FROM logistics WHERE Date >= @0 AND Date <= @1";
+    }
+
+    var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End);
+    var grid = new WebGrid(source: SelectedData, defaultSort: "Date", rowsPerPage:50);
+}
+
+<h1>Search for Log files</h1>
+<form method="get">
+        <div id="grid">
+                Start Date: <input type="text" name="StartDate" id="datepicker" size="30" value="@Request.QueryString["StartDate"]" />
+                End Date: <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
+                <input type="Submit" value="Search Date"/>
+                <hr/>
+                    @grid.GetHtml(
+                    tableStyle: "grid",
+                    headerStyle: "head",
+                    alternatingRowStyle: "alt",
+                    columns: grid.Columns(
+                        grid.Column("ProductName"),
+                        grid.Column("Category"),
+                        grid.Column("Price"),
+                        grid.Column("PurchasePrice"),
+                        grid.Column("Stock"),
+                        grid.Column("Date")
+            )
+        )
+                
+        </div>
+</form>
+<!--Dette er jQuery Datepicker, som kaldes når griddet laves ovenfor i vores grid.-->
+  <title>jQuery UI Datepicker - Format date</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
+    $( "#format" ).change(function() {
+      $( "#datepicker" ).datepicker( "option", "dateFormat", $( this ).val() );
+    });
+  });
+  </script>
+  <script>
+    $(function() {
+    $( "#datepicker2" ).datepicker({ dateFormat: 'dd-mm-yy' });
+    $( "#format" ).change(function() {
+      $( "#datepicker2" ).datepicker( "option", "dateFormat", $( this ).val() );
+    });
+  });
+  </script>
+ 
+
+ 

@@ -1,6 +1,73 @@
 ﻿@{
     
     Page.title = "Contact";
+
+    var db = Database.Open("Cafeen");
+
+    var selectCommand = "SELECT * FROM logistics";
+    var searchTerm = "";
+
+    string searchTerm_Start = "";
+    string searchTerm_End = "";
+
+    DateTime DateTime_Start = default(DateTime);
+    DateTime DateTime_End = default(DateTime);
+
+    
+    System.Data.SqlTypes.SqlDateTime dtSql_Start = default(System.Data.SqlTypes.SqlDateTime);
+    System.Data.SqlTypes.SqlDateTime dtSql_End = default(System.Data.SqlTypes.SqlDateTime);
+
+    if (!Request.QueryString["DateInput"].IsEmpty() ) {
+        searchTerm = Request["DateInput"];
+        searchTerm_Start = searchTerm + " 00:00:01";
+        searchTerm_End = searchTerm + " 11:59:59";
+        DateTime_Start = DateTime.ParseExact(searchTerm_Start, "dd/MM/yyyy hh:mm:ss", null);
+        DateTime_End = DateTime.ParseExact(searchTerm_End, "dd/MM/yyyy hh:mm:ss", null);
+        dtSql_Start = System.Data.SqlTypes.SqlDateTime.Parse(DateTime_Start.ToString("MM/dd/yyyy hh:mm:ss"));
+        dtSql_End = System.Data.SqlTypes.SqlDateTime.Parse(DateTime_End.ToString("MM/dd/yyyy hh:mm:ss"));
+        selectCommand = "SELECT * FROM logistics WHERE Date BETWEEN @0 AND @1";
+    }
+
+    var SelectedData = db.Query(selectCommand, dtSql_Start, dtSql_End);
+    var grid = new WebGrid(source: SelectedData, defaultSort: "Stock", rowsPerPage:50);
 }
 
-tom side
+<h1>Search for Log files @dtSql_Start</h1>
+<form method="get">
+        <div id="grid">
+                Date: <input type="text" name="DateInput" id="datepicker" size="30" value="@Request.QueryString["DateInput"]" />
+                <input type="submit" value="Search Date"/>
+                <hr/>
+                    @grid.GetHtml(
+                    tableStyle: "grid",
+                    headerStyle: "head",
+                    alternatingRowStyle: "alt",
+                    columns: grid.Columns(
+                        grid.Column("ProductName"),
+                        grid.Column("Category"),
+                        grid.Column("Price"),
+                        grid.Column("PurchasePrice"),
+                        grid.Column("Stock"),
+                        grid.Column("Date")
+            )
+        )
+                }
+        </div>
+</form>
+<!--Dette er jQuery Datepicker, som kaldes når griddet laves ovenfor i vores grid.-->
+  <title>jQuery UI Datepicker - Format date</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker({ dateFormat: 'mm/dd/yy' });
+    $( "#format" ).change(function() {
+      $( "#datepicker" ).datepicker( "option", "dateFormat", $( this ).val() );
+    });
+  });
+  </script>
+ 
+
+ 
