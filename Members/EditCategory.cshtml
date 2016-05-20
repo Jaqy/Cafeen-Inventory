@@ -1,43 +1,48 @@
 ﻿@{
     Page.title = "Edit Category";
 
-
-
-    //Indlæser de variable der er relevante for tilføjelse af nyt produkt. 
+    <!--Creates the variables we need to create a new category.--> 
     var Category = "";
     var NewCategory = "";
     double NewPrice = 0.0;
 
-          <!--Opens the database and inserts the data from above-->
+    <!--Opens the database-->
     var db = Database.Open("Cafeen");
 
-        <!--Collect the existing categories from the Database-->
+    <!--Collect the existing categories from the Database-->
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
-    var PriceCommand = "SELECT ID, Price FROM Category";
-    var PriceData = db.Query(PriceCommand);
-
-    //Følgende if-sætning hånterer når siden genindlæses efter tryk på submit-knappen. Produkt tilføjes hvis input er valide.
-    if(IsPost){
+    <!--The if statement starts if the user clicks on the "Update Category" and indputs the users values into the Database.-->
+    if(IsPost)
+    {
+        <!--Handle all the user inputs-->
         Category = Request["ListCategory"];
         NewCategory = Request["NewCategory"];
         NewPrice = Convert.ToDouble(Request.Form["NewPrice"]);
         bool NewPriceCheckbox = Request["NewPriceCheckbox"].AsBool();
-        if(NewPriceCheckbox){
+        if(NewPriceCheckbox)
+        {
+            <!--If the user wants a new price, then the AddNewProduct-function is called whit a new price from Funcs.cshtml-->
             Funcs.EditProduct(Category, NewCategory, NewPrice); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
         }
-        else{
+        else
+        {
+            <!--The AddNewProduct-function is called without a new price from Funcs.cshtml-->
             Funcs.EditProduct(Category, NewCategory);
         }
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
-        Response.Redirect("~/Members/Products");}
+        Response.Redirect("~/Members/Products");
+    }
 }
     <!--The style section contains yellow boxes for error messages to stand out-->
+
+<!--Creates the form to enter in new data to the database-->
   <h1>Edit a category</h1>
   <form method="post">
-    <fieldset><!--Creates the form to enter in new data to the database-->
+    <fieldset>
       <legend>Edit categories in database</legend>
 
+<!--Shows all the categorys in dropdown-->
     <p><label for="Category">Category:</label>
 <form name="FormCategory" method="post">
   <select name="ListCategory">
@@ -48,18 +53,19 @@
    </select>
 </form>
 
-
+<!--All the userinput-->
+<!--Userinput for Category name-->
       <p><label for="NewCategory">New category name:</label>
          <input type="text" name="NewCategory" value="@Request.Form["NewCategory"]" />
           @Html.ValidationMessage("Stock")
       </p>
         
-        
+<!--The checkbox if the user wants a new price-->         
   <div>
     @Html.CheckBox("NewPriceCheckbox", new { value = "true" })
     <label for="NewPriceCheckbox">Do you want to change all prices for the edited category?</label>
 
-
+<!--Shows the inputbox for a new price, if the "New Price" checkbox is checkt-->
     <div class="reveal-if-active">
       <p><label for="NewPrice">New price:</label>
          <input type="number" name="NewPrice" value="0.0" />
@@ -67,7 +73,7 @@
       </p>
     </div>
   </div> 
-
+<!--The submit button-->
       <p><input type="submit" name="buttonSubmit" value="Update category" /></p>
     </fieldset>
   </form>
