@@ -1,5 +1,6 @@
 ﻿@{
     Page.title = "Delete Product";
+
     <!--The lines below creates the variables to be used later-->
     var ProductName = "";
     var Category = "";
@@ -8,13 +9,14 @@
     var ProductID = "";
     var Stock = 0.0;
 
-    <!--When the button is not pressed, check the ID, open the database, check if rows are empty, display products -->
+    <!--When the submit button has yet to be pressed, the product ID is read, in order to display relevant product information.-->
     if(!IsPost){
         if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt()){
             ProductID = Request.QueryString["ID"];
             var db = Database.Open("Cafeen");
             var dbCommand = "SELECT * FROM Products WHERE ID = @0";
             var rows = db.QuerySingle(dbCommand, ProductID);
+
             if(rows != null) {
                 ProductName = rows.ProductName;
                 Category = rows.Category;
@@ -26,24 +28,23 @@
                 Validation.AddFormError("No Product was found for that ID.");
             }
         }
-        else{
+        else
+        {
+            <!--This line produces an error message, in case the user presses the update product button after having entered the page without a Product ID-->
             Validation.AddFormError("No Product was selected.");
         }
-    }<!--The delete request has the name buttondelete so that it doesn't conflict with other buttons on the page, IMPORTANT if you leave out the where command
-      you will instead delete the whole database-->
+    }
+    
+        <!--The delete button calls the DeleteProduct function.-->
         if(IsPost && !Request["buttonDelete"].IsEmpty()){
         ProductID = Request.Form["ProductID"];
         Funcs.DeleteProduct(ProductID);
-        @*
-        var db = Database.Open("Cafeen");
-        var deleteCommand = "DELETE FROM Products WHERE ID = @0";
-        db.Execute(deleteCommand, ProductID);*@
         Response.Redirect("~/Members/Products");
     }
 }
 
       <h1>Delete a Product</h1>
-      <!--Creates the tables for the information to be inserted-->
+      <!--Creates the areas for the product information to be displayed in.-->
       <form method="post">
         <fieldset>
         <legend>Product Information</legend>
@@ -62,11 +63,13 @@
 
         <p><span>Stock:</span>
           <span>@Stock</span></p>
-            <!--Creates the hidden ProductID to be used when deleting an object, and creates the button to delete -->
+
+        <!--Creates the hidden ProductID to be used when deleting an object, and creates the button to delete -->
         <input type="hidden" name="ProductID" value="@ProductID" />
         <p><input type="submit" name="buttonDelete" value="Delete Product" /></p>
         </fieldset>
       </form>
+
       <!--Creates the return to product listigs link-->
          <p>
             <a href="~/Members/Products">Return to Product listings</a>
