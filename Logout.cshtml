@@ -2,12 +2,8 @@
   Layout = "~/_Layout.cshtml";
   Page.title = "Login";
 
+  <!--Logs the user out and redirects to the front page.-->
   WebSecurity.Logout();
   Response.Redirect("~/index.cshtml");
 }
 
-<!--Overvej at ændre således at man blot føres til forsiden når man logger ud-->
-
-        <h1>Logout</h1>
-        <p>You are now logged out!</p>
-        <p><a href="@Href("~/index")">Return to home page</a></p>

@@ -9,6 +9,7 @@
     if(IsPost){
         username = Request["username"];
         password = Request["password"];
+        <!--Checks if the username and password match, and authenticates the user's login status.-->
         if(WebSecurity.Login(username,password,true)){
             Response.Redirect("~/index");
         }
@@ -30,6 +31,7 @@
     <body>
         <h1>Login</h1>
         <form method="post">
+            <!--Gives an error message in case the user us already logged in.-->
             @if(WebSecurity.IsAuthenticated){
                 <p>You are currently logged in as @WebSecurity.CurrentUserName.
                   <a href="@Href("~/Logout")">Log out</a>
