@@ -2,12 +2,13 @@
     Page.title = "Add Product";
 
     <!--Validates that there is a genuine input in the fields so no blanks is created-->
+    <!--The style section contains yellow boxes for error messages to stand out-->
     Validation.RequireField("ProductName", "You haven't entered a Product Name");
     Validation.RequireField("Price", "You haven't entered a Price");
     Validation.RequireField("PurchasePrice", "You haven't entered a Purchase Price");
     Validation.RequireField("Stock", "You haven't entered Stock");
 
-    //Indlæser de variable der er relevante for tilføjelse af nyt produkt. 
+    <!--Creates the variables we need to create a new produck.-->
     var ProductName = "";
     var Category = "";
     var AltCategory = "";
@@ -15,49 +16,50 @@
     double PurchasePrice = 0.0;
     double Stock = 0.0;
 
-          <!--Opens the database and inserts the data from above-->
+    <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
-        <!--Collect the Category from the Database-->
+    <!--Collect the Category from the Database-->
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
-    var PriceCommand = "SELECT ID, Price FROM Category";
-    var PriceData = db.Query(PriceCommand);
-
-    //Følgende if-sætning hånterer når siden genindlæses efter tryk på submit-knappen. Produkt tilføjes hvis input er valide.
-    if(IsPost && Validation.IsValid()){
+    <!--The if statement starts if the user clicks on the "Update Category" and indputs the produck into the Database, if the input is valid.-->
+    if(IsPost && Validation.IsValid())
+    {
+        <!--Handle all the user inputs-->
         ProductName = Request.Form["ProductName"];
         Category = Request["ListCategory"];
         AltCategory = Request["AltCategory"];
+        <!--Convert all the user inputs to the desired type-->
         Price = Convert.ToDouble(Request.Form["Price"]);
         PurchasePrice = Convert.ToDouble(Request.Form["PurchasePrice"]);
         Stock = Convert.ToDouble(Request.Form["Stock"]);
         bool CategoryCheckbox = Request["CategoryCheckbox"].AsBool();
-        if(CategoryCheckbox){
-            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock); //Kalder AddNewProduct-funktionen fra Funcs.cshtml
+        <!--Add as a new category if the user has checkt the "Add new category" checkbox-->
+        if(CategoryCheckbox)
+        {
+            <!--The user makes a new category and add id to the Database-->
+            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock); 
         }
-        else{
+        else
+        {
+            <!--Uses the category chosen from the dropdown, and add it to the Databese-->
             Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock);
         }
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
-        Response.Redirect("~/Members/Products");}
+        Response.Redirect("~/Members/Products");
+    }
 }
-    <!--The style section contains yellow boxes for error messages to stand out-->
+
+<!--Creates the form to enter in new data to the database-->
   <h1>Add a product</h1>
   <form method="post">
-    <fieldset><!--Creates the form to enter in new data to the database-->
+    <fieldset>
       <legend>Add product to database</legend>
       <p><label for="ProductName">Product Name:</label>
          <input type="text" name="ProductName" value="@Request.Form["ProductName"]" />
           @Html.ValidationMessage("ProductName")
       </p>
 
-
-<!--
-      <p><label for="Category">Category:</label>
-         <input type="text" name="Category" value=" Husk razor//Request.Form["Category"]" />
-         Husk razor// Html.ValidationMessage("Category")
-      </p>
--->
+<!--Dropdown shows all the categorys-->
     <p><label for="Category">Category:</label>
 <form name="FormCategory" method="post">
   <select name="ListCategory">
@@ -68,12 +70,12 @@
    </select>
 </form>  
         
-        
+<!--Checkbox if the user wants a new category-->      
   <div>
     @Html.CheckBox("CategoryCheckbox", new { value = "true" })
     <label for="CategoryCheckbox">Add new category?</label>
 
-
+<!--Shows the inputbox for a new category, if the "Add new category" is checkt-->
     <div class="reveal-if-active">
       <p><label for="Price">New category:</label>
          <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
@@ -82,8 +84,7 @@
     </div>
   </div>     
         
-        
-            
+<!--All the user input boxes is created-->             
         </p>
       <p><label for="Price">Price:</label>
          <input type="number" name="Price" value="@Request.Form["Price"]" />
@@ -101,6 +102,7 @@
           @Html.ValidationMessage("Stock")
       </p>
 
+<!--The submit button is created-->
       <p><input type="submit" name="buttonSubmit" value="Add product" /></p>
     </fieldset>
   </form>
