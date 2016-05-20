@@ -1,21 +1,25 @@
 ﻿
 @{
-    Page.title = "Product list"; 
+    Page.title = "Product List"; 
 
+    <!--Creates the variables for use on this page.-->
     var db = Database.Open("Cafeen") ;
     var selectCommand = "SELECT * FROM Products";
     var searchTerm = "";
-    <!--This code handles the search for Categories like Øl, or Soda-->
+
+    <!--This code handles the search for Categories. It ensures the search field is not empty, and then selects products from the table that matches the search.-->
     if(!Request.QueryString["searchCategory"].IsEmpty() ) {
         selectCommand = "SELECT * FROM Products WHERE Category = @0";
         searchTerm = Request.QueryString["searchCategory"];
     }
-    <!--This code handles the search for any product name like Tuborg, or Cocio, the search adds a % infront and after the search term, which results in 
-    the search searching for the search title anywhere it can-->
+
+    <!--This code handles the search for product names. The search adds a % infront and after the search term, which ensures that the full Product Name
+    string is analysed. As an example, you Påske Bryg will be returned if you search for Bryg.-->
     if(!Request.QueryString["searchProductName"].IsEmpty() ) {
     selectCommand = "SELECT * FROM Products WHERE ProductName LIKE @0";
     searchTerm = "%" + Request["searchProductName"] + "%";
 }
+    <!--Collects the selectCommand value, so the gridview can be update to reflect the search parameters-->
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Category", rowsPerPage:10);
 
