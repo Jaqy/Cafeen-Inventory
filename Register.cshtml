@@ -26,11 +26,12 @@
     if(password != confirmPassword){
       errorMessage = "Passwords don't match.";
     }
-    else {
+    else 
+    {
       if(WebSecurity.UserExists(username)){
         <!--Gives an error message in case the user already exists.-->
         errorMessage = String.Format("User '{0}' already exists.", username);
-      }
+    }
       else
       {
         <!--Creates the new user account, and creates the hash entry.-->
