@@ -10,6 +10,7 @@
   
   if(!IsPost){
     if(WebSecurity.IsAuthenticated){
+      <!--Gives an error message in case the user is already logged in upon entering the pages.-->
       errorMessage = String.Format("You are already logged in. (User name: {0})", WebSecurity.CurrentUserName);
     }
   }
@@ -20,15 +21,19 @@
     username = Request["username"];
     password = Request["password"];
     confirmPassword = Request["confirmPassword"];
- 
+    
+    <!--Ensures the user can only create a password, if the password was entered identically in the two password fields.-->
     if(password != confirmPassword){
       errorMessage = "Passwords don't match.";
     }
     else {
       if(WebSecurity.UserExists(username)){
+        <!--Gives an error message in case the user already exists.-->
         errorMessage = String.Format("User '{0}' already exists.", username);
       }
-      else{
+      else
+      {
+        <!--Creates the new user account, and creates the hash entry.-->
         WebSecurity.CreateUserAndAccount(username,password,null,false);
         WebSecurity.Login(username, password, true);
         errorMessage = String.Format("{0} created.", username);
