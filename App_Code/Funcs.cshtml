@@ -26,10 +26,10 @@
         db.Execute("UPDATE Products SET Category=@1 WHERE Category=@0", Category, NewCategory);
     }   
 
-    public static void UpdateStock(double Stock, string ProductID)
+    public static void EditProduct(double NewStock, string ProductID)
     {
         var db = Database.Open("Cafeen");
-        db.Execute("UPDATE Products SET Stock=@0  WHERE ID=@1", Stock, ProductID);
+        db.Execute("UPDATE Products SET Stock=@0  WHERE ID=@1", NewStock, ProductID);
 
     } 
     public static void DeleteProduct(string ProductID)

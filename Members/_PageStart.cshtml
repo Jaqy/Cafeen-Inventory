@@ -1,7 +1,9 @@
 ﻿ @{
+    <!--Read the global site layout from the Layout file.-->
     Layout = "~/_Layout.cshtml";
     Response.CacheControl = "no-cache";
  
+    <!--Redirects to the login page, if the user isn't logged in.-->
     if (!WebSecurity.IsAuthenticated) {
         Response.Redirect("~/Login");
     }
