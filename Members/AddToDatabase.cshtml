@@ -37,12 +37,19 @@
         if(CategoryCheckbox)
         {
             <!--The user makes a new category and add id to the Database-->
-            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock); 
+            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock);
+            //Creates a log entry for the creation of the new category.
+            Funcs.ChangeRegistered(AltCategory); 
+            //Creates a log entry for the new product.
+            Funcs.ChangeRegistered(ProductName, AltCategory, Stock);
+
         }
         else
         {
             <!--Uses the category chosen from the dropdown, and add it to the Databese-->
             Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock);
+            //Creates a log entry for the new product.
+            Funcs.ChangeRegistered(ProductName, Category, Stock);
         }
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");

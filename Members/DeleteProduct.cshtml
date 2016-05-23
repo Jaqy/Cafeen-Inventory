@@ -38,6 +38,13 @@
         <!--The delete button calls the DeleteProduct function.-->
         if(IsPost && !Request["buttonDelete"].IsEmpty()){
         ProductID = Request.Form["ProductID"];
+        var db = Database.Open("Cafeen");
+        var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+        var rows = db.QuerySingle(dbCommand, ProductID);
+        ProductName = rows.ProductName;
+        //Creates log entry for the deletion of the product.
+        Funcs.ChangeRegistered(ProductID, ProductName);
+        //Deletes the product from the Products table.
         Funcs.DeleteProduct(ProductID);
         Response.Redirect("~/Members/Products");
     }
