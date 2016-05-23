@@ -4,18 +4,33 @@
     var db = Database.Open("Cafeen") ;
     var selectCommand = "SELECT * FROM Products";
     var searchTerm = "";
+    var CountStat = "";
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Category");
+    var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
     if(IsPost){
-        Funcs.AddLogData(); //Hvis siden genfriskes vha. af submit, da tilføjes data'en fra Products tabellen til Logs tabellen.
+        CountStat = Request["CountStat"];
+        Funcs.UpdateCountType("Opening");
+        <!--Funcs.AddLogData(); -->//Hvis siden genfriskes vha. af submit, da tilføjes data'en fra Products tabellen til Logs tabellen.
         Response.Redirect("~/Members/Products.cshtml");
     }
 
 }
-    <h2>Inventory List</h2>
-    <h3>Date: @DateTime.Now</h3>
+<h2>Inventory List</h2>
+<h3>Date: @DateTime.Now</h3>
         <!--Adds the coloumns that shows the database, + the edit link to update the database-->
+
+    <p><label for="Category">Category:</label> </p>
+<form name="FormCategory" method="post">
+  <select name="ListCategory">
+            @foreach(var row in CategoryData)
+            {
+                <option value="@row.Category">@row.Category</option>
+            }
+   </select>
+</form>  
+
     <div>
         @grid.GetHtml(
             tableStyle: "grid",

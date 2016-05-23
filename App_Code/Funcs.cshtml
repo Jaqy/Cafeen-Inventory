@@ -51,8 +51,14 @@
     
     public static void AddLogData(){
         var db = Database.Open("Cafeen");
-        db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
+        db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock, CountType) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock, CountType FROM Products");
         }
 
+    public static void UpdateCountType(string CountType)
+    {
+        var db = Database.Open("Cafeen");
+        db.Execute("UPDATE Products SET CountType=@0", CountType);
+
+    } 
 
 }
