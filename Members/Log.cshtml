@@ -24,6 +24,7 @@
         searchTerm = Request["searchProductName"];
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
+
         if( searchTerm.Equals("") )
         {
             selectCommand ="SELECT * FROM Log WHERE Date >= @0 AND Date <= @1";            

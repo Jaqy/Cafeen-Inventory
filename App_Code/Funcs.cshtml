@@ -75,5 +75,42 @@
     }
 
     //Product edited
+    public static void ChangeRegistered(string ProductID, string OldProductName, string OldCategory, string OldPrice, string OldPurchasePrice, string OldStock)
+    {
+        var db = Database.Open("Cafeen");
+        var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+        var rows = db.QuerySingle(dbCommand, ProductID);
+        var ProductName = rows.ProductName;
+        var Category = rows.Category;
+        var Price = Convert.ToString(rows.Price);
+        var PurchasePrice = Convert.ToString(rows.PurchasePrice);
+        var Stock = Convert.ToString(rows.Stock);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        if ( !ProductName.Equals(OldProductName) )
+        {
+            sb.Append(OldProductName).Append(" changed to ").Append(ProductName).Append(". ");
+        }
+        if ( !Category.Equals(OldCategory) )
+        {
+            sb.Append("Category ").Append(OldCategory).Append(" changed to ").Append(Category).Append(". ");
+        }
+        if ( !Price.Equals(OldPrice) )
+        {
+            sb.Append("Price of ").Append(OldPrice).Append(" changed to ").Append(Price).Append(". ");
+        }
+        if ( !PurchasePrice.Equals(OldPurchasePrice) )
+        {
+            sb.Append("Purchase Price of ").Append(OldPurchasePrice).Append(" changed to ").Append(PurchasePrice).Append(". ");
+        }
+        if ( !Stock.Equals(OldStock) )
+        {
+            sb.Append("Stock of ").Append(OldStock).Append(" changed to ").Append(Stock).Append(". ");
+        }
+        var comment = sb.ToString();
+        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, OldProductName); 
+    }
+
+    //Category edited
+
 
 }
