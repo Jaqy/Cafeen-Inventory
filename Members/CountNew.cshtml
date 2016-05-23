@@ -1,18 +1,21 @@
-﻿@{
+﻿ 
+@{
     Page.title = "Count"; 
 
     var db = Database.Open("Cafeen") ;
     var selectCommand = "SELECT * FROM Products";
     var searchTerm = "";
-    var CountStat = "";
+    var CountType = "";
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Category");
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
-
+    if( Request["CountOption"] != null){
+        CountType = Request["CountOption"];
+    }
+    
     if(IsPost){
-        CountStat = Request["CountStat"];
-        Funcs.UpdateCountType("Opening");
-        <!--Funcs.AddLogData(); -->//Hvis siden genfriskes vha. af submit, da tilføjes data'en fra Products tabellen til Logs tabellen.
+        db.Execute("UPDATE Products SET CountType=@0", CountType);
+        Funcs.AddLogData(); //Hvis siden genfriskes vha. af submit, da tilføjes data'en fra Products tabellen til Logs tabellen.
         Response.Redirect("~/Members/Products.cshtml");
     }
 
@@ -21,16 +24,15 @@
 <h3>Date: @DateTime.Now</h3>
         <!--Adds the coloumns that shows the database, + the edit link to update the database-->
 
-    <p><label for="Category">Category:</label> </p>
-<form name="FormCategory" method="post">
-  <select name="ListCategory">
-            @foreach(var row in CategoryData)
-            {
-                <option value="@row.Category">@row.Category</option>
-            }
-   </select>
-</form>  
-
+<form method="post" action="">
+<p><label>Type of inventory count</label> </p>
+<select name="CountOption">
+    <option value=""></option>
+    <option value="Opening">Opening</option>
+    <option value="Closing">Closing</option>
+    <option value="SpecialEventOpening">Special Event Opening</option>
+    <option value="SpecialEventClosing">Special Event Closing</option>
+</select>
     <div>
         @grid.GetHtml(
             tableStyle: "grid",
@@ -44,7 +46,11 @@
             )
         )
     </div>
+    <input type="Submit" value="Save Count" />
 
-    <form method="post"><!--Button for submitting days count. Calls function that moves data from Products table to Logs table-->
-            <input type="Submit" value="Save Count" />
-    </form>
+</form>
+
+
+
+
+ 
