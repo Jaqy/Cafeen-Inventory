@@ -7,8 +7,18 @@
     var Category = "";
     double Price = 0.0;
     double PurchasePrice = 0.0;
-    var ProductID = "";
     double Stock = 0.0;
+
+    //These variables are used to store the old values, so they can be compared to the new values and added to the log accordingly.
+    var db = Database.Open("Cafeen");
+    var ProductID = Request.QueryString["ID"];
+    var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+    var rows = db.QuerySingle(dbCommand, ProductID);
+    string OldProductName = rows.ProductName;
+    string OldCategory = rows.Category;
+    string OldPrice = Convert.ToString(rows.Price);
+    string OldPurchasePrice = Convert.ToString(rows.PurchasePrice);
+    string OldStock = Convert.ToString(rows.Stock);
 
     <!--Handles the first time the user enters the page.-->
     if(!IsPost)
@@ -17,9 +27,7 @@
         if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
             {
             ProductID = Request.QueryString["ID"];
-            var db = Database.Open("Cafeen");
-            var dbCommand = "SELECT * FROM Products WHERE ID = @0";
-            var rows = db.QuerySingle(dbCommand, ProductID);
+
             <!--if the row is equal to null skip then we skip because we will get an error if we try and get informaiton out of an empty row.-->
             if(rows != null)
             {
@@ -59,6 +67,7 @@
         <!--Opens the database and updates the product information, by calling the EditProduct command with the values set above.-->
         if(Validation.IsValid()){
             Funcs.EditProduct(ProductName, Category, Price, PurchasePrice, Stock, ProductID);
+            Funcs.ChangeRegistered(ProductID, OldProductName, OldCategory, OldPrice, OldPurchasePrice, OldStock);
             Response.Redirect("~/Members/Products.cshtml");
         }
     }

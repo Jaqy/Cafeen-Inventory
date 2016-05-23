@@ -16,8 +16,8 @@
     <!--This code handles the search for product names. The search adds a % infront and after the search term, which ensures that the full Product Name
     string is analysed. As an example, you Påske Bryg will be returned if you search for Bryg.-->
     if(!Request.QueryString["searchProductName"].IsEmpty() ) {
-    selectCommand = "SELECT * FROM Products WHERE ProductName LIKE @0";
-    searchTerm = "%" + Request["searchProductName"] + "%";
+        selectCommand = "SELECT * FROM Products WHERE ProductName LIKE @0";
+        searchTerm = "%" + Request["searchProductName"] + "%";
 }
     <!--Collects the selectCommand value, so the gridview can be update to reflect the search parameters-->
     var selectedData = db.Query(selectCommand, searchTerm);

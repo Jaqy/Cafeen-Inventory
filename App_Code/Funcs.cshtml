@@ -38,21 +38,79 @@
         db.Execute("DELETE FROM Products WHERE ID = @0", ProductID);
     }
 
-    public static void AddCategory(string Category, double Price){
-        var db = Database.Open("Cafeen");
-        db.Execute("INSERT INTO CategoryC (Category, Price) VALUES(@0, @1)", Category, Price);
-    }
-
     public static void DeleteCategory(string CategoryID)
     {
         var db = Database.Open("Cafeen");
         db.Execute("DELETE FROM Category WHERE ID = @0", CategoryID);
     }
     
-    public static void AddLogData(){
+    public static void AddLogData()
+    {
         var db = Database.Open("Cafeen");
         db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
+    }
+
+    //New product added.
+    public static void ChangeRegistered(string ProductName, string Category, double Stock)
+    {
+        var db = Database.Open("Cafeen");
+        string comment = Stock + " " + ProductName + " added to database under the category " + Category + ".";
+        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, ProductName); 
+    }
+
+    //New category created
+    public static void ChangeRegistered(string Category)
+    {
+        var db = Database.Open("Cafeen");
+        string comment = "New category called " + Category + " created.";
+        db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
+    }
+
+    //Product deleted
+    public static void ChangeRegistered(string ProductID, string ProductName)
+    {
+        var db = Database.Open("Cafeen");
+        string comment = "Product " + ProductName + " with ID '" + ProductID + "' deleted.";
+        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, ProductName); 
+    }
+
+    //Product edited
+    public static void ChangeRegistered(string ProductID, string OldProductName, string OldCategory, string OldPrice, string OldPurchasePrice, string OldStock)
+    {
+        var db = Database.Open("Cafeen");
+        var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+        var rows = db.QuerySingle(dbCommand, ProductID);
+        var ProductName = rows.ProductName;
+        var Category = rows.Category;
+        var Price = Convert.ToString(rows.Price);
+        var PurchasePrice = Convert.ToString(rows.PurchasePrice);
+        var Stock = Convert.ToString(rows.Stock);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        if ( !ProductName.Equals(OldProductName) )
+        {
+            sb.Append(OldProductName).Append(" changed to ").Append(ProductName).Append(". ");
         }
+        if ( !Category.Equals(OldCategory) )
+        {
+            sb.Append("Category ").Append(OldCategory).Append(" changed to ").Append(Category).Append(". ");
+        }
+        if ( !Price.Equals(OldPrice) )
+        {
+            sb.Append("Price of ").Append(OldPrice).Append(" changed to ").Append(Price).Append(". ");
+        }
+        if ( !PurchasePrice.Equals(OldPurchasePrice) )
+        {
+            sb.Append("Purchase Price of ").Append(OldPurchasePrice).Append(" changed to ").Append(PurchasePrice).Append(". ");
+        }
+        if ( !Stock.Equals(OldStock) )
+        {
+            sb.Append("Stock of ").Append(OldStock).Append(" changed to ").Append(Stock).Append(". ");
+        }
+        var comment = sb.ToString();
+        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, OldProductName); 
+    }
+
+    //Category edited
 
 
 }
