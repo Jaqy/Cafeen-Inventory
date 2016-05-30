@@ -41,12 +41,13 @@
             {
                 Funcs.ChangeRegistered(Convert.ToString(row.ID), row.ProductName, row.Category, Convert.ToString(row.Price), Convert.ToString(row.PurchasePrice), Convert.ToString(row.Stock));
             }           
-                        
+                     
         }
         else
         {
             <!--The AddNewProduct-function is called without a new price from Funcs.cshtml-->
             Funcs.EditProduct(Category, NewCategory);
+            Funcs.CategoryChangeRegistered(NewCategory, Category);
         }
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");
