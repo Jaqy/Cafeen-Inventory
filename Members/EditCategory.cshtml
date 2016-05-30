@@ -9,6 +9,13 @@
     <!--Opens the database-->
     var db = Database.Open("Cafeen");
 
+
+
+    //These variables are used to store the old values, so they can be compared to the new values and added to the log accordingly.
+    string OldCategory = "";
+    string OldPrice = "";
+
+
     <!--Collect the existing categories from the Database-->
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
@@ -16,14 +23,25 @@
     if(IsPost)
     {
         <!--Handle all the user inputs-->
+        var dbCommand = "SELECT * FROM Products WHERE Category = @0";
         Category = Request["ListCategory"];
+        //affectedProducts samler de produkter der tilhører den behandlede kategori.
+        var affectedProducts = db.Query(dbCommand, Category);
         NewCategory = Request["NewCategory"];
         NewPrice = Convert.ToDouble(Request.Form["NewPrice"]);
         bool NewPriceCheckbox = Request["NewPriceCheckbox"].AsBool();
         if(NewPriceCheckbox)
         {
-            <!--If the user wants a new price, then the AddNewProduct-function is called whit a new price from Funcs.cshtml-->
+            <!--If the user wants a new price, then the AddNewProduct-function is called with a new price from Funcs.cshtml-->
+            Funcs.CategoryChangeRegistered(NewCategory, Category, Convert.ToString(NewPrice));
+
             Funcs.EditProduct(Category, NewCategory, NewPrice); 
+
+            foreach(var row in affectedProducts)
+            {
+                Funcs.ChangeRegistered(Convert.ToString(row.ID), row.ProductName, row.Category, Convert.ToString(row.Price), Convert.ToString(row.PurchasePrice), Convert.ToString(row.Stock));
+            }           
+                        
         }
         else
         {

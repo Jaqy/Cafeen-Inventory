@@ -2,53 +2,71 @@
 @using System.Text;
 @functions {
 
+
+    //-------------------------------------------------AddProduct----------------------------------------------------\\
+
+
+    //This function adds a new product to the tabel named "Products". It is used on AddToDatabase.cshtml
     public static void AddNewProduct(string ProductName, string Category, double Price, double PurchasePrice, double Stock)
     {  
         var db = Database.Open("Cafeen");  
         db.Execute("INSERT INTO Products (ProductName, Category, Price, PurchasePrice, Stock) VALUES(@0, @1, @2, @3, @4)", ProductName, Category, Price, PurchasePrice, Stock); 
     }   
     
-    
+
+
+    //-------------------------------------------------EditProduct----------------------------------------------------\\
+        
+    //This overloaded function edits an existing product in the "Products" tabel. It is used on EditProduct.cshtml
     public static void EditProduct(string ProductName, string Category, double Price, double PurchasePrice, double Stock, string ProductID)
     {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET ProductName=@0, Category=@1, Price=@2, PurchasePrice=@3, Stock=@4 WHERE ID=@5", ProductName, Category, Price, PurchasePrice, Stock, ProductID);
     }
     
-    
+    //This overloaded function sets a new price and category for all products within a given category. It is used on EditCategory.cshtml
     public static void EditProduct(string Category, string NewCategory, double NewPrice)  {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET Category=@1, Price=@2 WHERE Category=@0", Category, NewCategory, NewPrice);
     }   
 
+    //This overloaded function sets a new category for all products within a given category. It is used on EditCategory.cshtml
     public static void EditProduct(string Category, string NewCategory)  {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET Category=@1 WHERE Category=@0", Category, NewCategory);
     }   
 
+    //This overloaded function sets a new stock for a specific product. It is used on UpdateStock.cshtml (might be redundant) 
     public static void EditProduct(double NewStock, string ProductID)
     {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET Stock=@0  WHERE ID=@1", NewStock, ProductID);
-
     } 
+
+
+
+    //-----------------------------------------------DeleteProduct----------------------------------------------------\\
+
+    //This function removes a specific product from the "Products" tabel. It is used on DeleteProduct.cshtml 
     public static void DeleteProduct(string ProductID)
     {
         var db = Database.Open("Cafeen");
         db.Execute("DELETE FROM Products WHERE ID = @0", ProductID);
     }
 
-    public static void DeleteCategory(string CategoryID)
-    {
-        var db = Database.Open("Cafeen");
-        db.Execute("DELETE FROM Category WHERE ID = @0", CategoryID);
-    }
     
+
+    //-------------------------------------------------AddLogData----------------------------------------------------\\
+    
+    //This function copies all data from "Products" to the "History" tabel.
     public static void AddLogData()
     {
         var db = Database.Open("Cafeen");
         db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock FROM Products");
     }
+
+
+    //----------------------------------------------Changeregistered----------------------------------------------------\\
 
     //New product added.
     public static void ChangeRegistered(string ProductName, string Category, double Stock)
@@ -111,6 +129,22 @@
     }
 
     //Category edited
+    public static void CategoryChangeRegistered(string NewCategory, string OldCategory, string NewPrice)
+    {
+        var db = Database.Open("Cafeen");
 
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        if ( !NewCategory.Equals(OldCategory) )
+        {
+            sb.Append("Category ").Append(OldCategory).Append(" changed to ").Append(NewCategory).Append(". ");
+        }
+        if ( !NewPrice.Equals("") )
+        {
+            sb.Append("Price of all products in ").Append(OldCategory).Append(" changed to ").Append(NewPrice).Append(". ");
+        }
+
+        var comment = sb.ToString();
+        db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
+    }
 
 }
