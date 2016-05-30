@@ -13,12 +13,12 @@
     var searchTerm_Start = "";
     var searchTerm_End = "";
 
-    var selectCommand = "SELECT * FROM logistics";
+    var selectCommand = "SELECT * FROM History";
   
     if (IsPost && Validation.IsValid()) {
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
-        selectCommand ="SELECT * FROM logistics WHERE Date >= @0 AND Date <= @1";
+        selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1";
     }
 
     var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End);
