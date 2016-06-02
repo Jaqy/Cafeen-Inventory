@@ -1,6 +1,6 @@
 ﻿@{
 
-    Page.title = "Log";
+    Page.title = "History";
 
 
     <!--Validates that there is a genuine input in the fields so no blanks is created-->
@@ -10,37 +10,22 @@
 
     var db = Database.Open("Cafeen");
 
-    //This variabel is used for searching for a product name. 
-    var searchTerm = "";
-
-    //The two variables below are used when search for dates or date intervals.
     var searchTerm_Start = "";
     var searchTerm_End = "";
 
-    var selectCommand = "SELECT * FROM Log";
-        
- 
-    if (IsPost && Validation.IsValid() ) {
-        searchTerm = Request["searchProductName"];
+    var selectCommand = "SELECT * FROM History";
+  
+    if (IsPost && Validation.IsValid()) {
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
-
-        if( searchTerm.Equals("") )
-        {
-            selectCommand ="SELECT * FROM Log WHERE Date >= @0 AND Date <= @1";            
-        }
-        else
-        {
-            selectCommand ="SELECT * FROM Log WHERE Date >= @0 AND Date <= @1 AND ProductName = @2"; 
-        }
-        
+        selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1";
     }
 
-    var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End, searchTerm);
+    var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End);
     var grid = new WebGrid(source: SelectedData, defaultSort: "Date", rowsPerPage:50);
 }
 
-<h1>Search through Log files</h1>
+<h1>Search through history</h1>
 <form method="post">
         <div id="grid">
                 <p>
@@ -51,24 +36,19 @@
                 End Date: <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
                 @Html.ValidationMessage("EndDate")
                 </p>
-                <p>
-                Product to look for: <input type="text" name="searchProductName" value="@Request.QueryString["searchProductName"]" />
-                </p>
-                <input type="Submit" value="Search"/>
-
-
-
-
-
+                <input type="Submit" value="Search Date"/>
                 <hr/>
                     @grid.GetHtml(
                     tableStyle: "grid",
                     headerStyle: "head",
                     alternatingRowStyle: "alt",
                     columns: grid.Columns(
-                        grid.Column("Date"),
                         grid.Column("ProductName"),
-                        grid.Column("Event")
+                        grid.Column("Category"),
+                        grid.Column("Price"),
+                        grid.Column("PurchasePrice"),
+                        grid.Column("Stock"),
+                        grid.Column("Date")
             )
         )
                 

@@ -1,24 +1,34 @@
 ﻿@{
     Page.title = "Edit Product";
+
     <!--When the site is shown for the first time, it gets the ProductID form the query string, 
     the code then uses the ID to read the corresponding product out of the database -->
     var ProductName = "";
     var Category = "";
     double Price = 0.0;
     double PurchasePrice = 0.0;
-    var ProductID = "";
     double Stock = 0.0;
 
-   if(!IsPost)
-   {
-               <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
+    //These variables are used to store the old values, so they can be compared to the new values and added to the log accordingly.
+    var db = Database.Open("Cafeen");
+    var ProductID = Request.QueryString["ID"];
+    var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+    var rows = db.QuerySingle(dbCommand, ProductID);
+    string OldProductName = rows.ProductName;
+    string OldCategory = rows.Category;
+    string OldPrice = Convert.ToString(rows.Price);
+    string OldPurchasePrice = Convert.ToString(rows.PurchasePrice);
+    string OldStock = Convert.ToString(rows.Stock);
+
+    <!--Handles the first time the user enters the page.-->
+    if(!IsPost)
+    {
+        <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
         if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
-         {
+            {
             ProductID = Request.QueryString["ID"];
-            var db = Database.Open("Cafeen");
-            var dbCommand = "SELECT * FROM Products WHERE ID = @0";
-            var rows = db.QuerySingle(dbCommand, ProductID);
-                        <!--if the row is equal to null skip then we skip because we will get an error if we try and get informaiton out of an empty row.-->
+
+            <!--if the row is equal to null skip then we skip because we will get an error if we try and get informaiton out of an empty row.-->
             if(rows != null)
             {
                 ProductName = rows.ProductName;
@@ -27,17 +37,19 @@
                 PurchasePrice = rows.PurchasePrice;
                 Stock = rows.Stock;
             } 
-              else 
+                else 
             {
                 Validation.AddFormError("No Product was found for that ID.");
             }
-          }
-        else{
+            }
+        else
+        {
+            <!--This line produces an error message, in case the user presses the update product button after having entered the page without a Product ID-->
             Validation.AddFormError("No Product was selected.");
         }
     }
 
-    if(IsPost){ <!--If the update product button is pressed, we require all 4 fields full, and then request whats inside the tables.-->
+    if(IsPost){ <!--If the update product button is pressed, we require all 4 fields to be filled out, and then request what's inside the fields.-->
         Validation.RequireField("ProductName", "You haven't entered a Product Name");
         Validation.RequireField("Category", "You haven't entered a Category");
         Validation.RequireField("Price", "You haven't entered a Price");
@@ -52,9 +64,10 @@
         Stock = Request.Form["Stock"].AsInt();
         ProductID = Request.Form["ProductID"];
 
-        <!--Opens the database and updates the product information, the WHERE secures that it is only the ID that is updatet and not the whole database-->
+        <!--Opens the database and updates the product information, by calling the EditProduct command with the values set above.-->
         if(Validation.IsValid()){
             Funcs.EditProduct(ProductName, Category, Price, PurchasePrice, Stock, ProductID);
+            Funcs.ChangeRegistered(ProductID, OldProductName, OldCategory, OldPrice, OldPurchasePrice, OldStock);
             Response.Redirect("~/Members/Products.cshtml");
         }
     }

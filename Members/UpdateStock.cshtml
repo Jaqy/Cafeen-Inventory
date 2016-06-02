@@ -1,48 +1,52 @@
 ﻿@{
-    Page.title = "Edit Product";
+    Page.title = "Update product stock";
+
     <!--When the site is shown for the first time, it gets the ProductID form the query string, 
     the code then uses the ID to read the corresponding product out of the database -->
     var ProductID = "";
     double Stock = 0.0;
     var ProductName = "";
 
-   if(!IsPost)
-   {
-               <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
+    <!--Handles the first time the user enters the page.-->
+    if(!IsPost)
+    {
+        <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
         if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
-         {
+            {
             ProductID = Request.QueryString["ID"];
             var db = Database.Open("Cafeen");
             var dbCommand = "SELECT * FROM Products WHERE ID = @0";
             var rows = db.QuerySingle(dbCommand, ProductID);
-                        <!--if the row is equal to null skip then we skip because we will get an error if we try and get informaiton out of an empty row.-->
+            <!--if the row is equal to null then we skip because we will get an error if we try and get informaiton out of an empty row.-->
             if(rows != null)
             {
                 ProductName = rows.ProductName;
                 Stock = rows.Stock;
             } 
-              else 
+                else 
             {
                 Validation.AddFormError("No Product was found for that ID.");
             }
-          }
-        else{
+            }
+        else
+        {
+            <!--This line produces an error message, in case the user presses the update product button after having entered the page without a Product ID-->
             Validation.AddFormError("No Product was selected.");
         }
-    }
+      }
 
-    if(IsPost){ <!--If the update product button is pressed, we require all 4 fields full, and then request whats inside the tables.-->
+    <!--If the update product button is pressed, we require the input field to be full, and then request what's inside the input field.-->
+    if(IsPost){ 
  
         Validation.RequireField("Stock", "You haven't entered a Stock number");
         Validation.RequireField("ProductID", "No product ID was submitted!");
 
-
         Stock = Request.Form["Stock"].AsInt();
         ProductID = Request.Form["ProductID"];
 
-        <!--Opens the database and updates the product information, the WHERE secures that it is only the ID that is updatet and not the whole database-->
+        <!--Opens the database and updates the product information, by calling the EditProduct-->
         if(Validation.IsValid()){
-            Funcs.UpdateStock(Stock, ProductID);
+            Funcs.EditProduct(Stock, ProductID);
             Response.Redirect("~/Members/CountNew.cshtml");
         }
     }
