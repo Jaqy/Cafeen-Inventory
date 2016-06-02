@@ -82,6 +82,9 @@
     public static void ChangeRegistered(string Category)
     {
         var db = Database.Open("Cafeen");
+<<<<<<< HEAD
+        db.Execute("INSERT INTO Logistics (ID, ProductName, Category, Price, PurchasePrice, Stock, CountType) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock, CountType FROM Products");
+=======
         string comment = "New category called " + Category + " created.";
         db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
     }
@@ -122,6 +125,7 @@
         if ( !PurchasePrice.Equals(OldPurchasePrice) )
         {
             sb.Append("Purchase Price of ").Append(OldPurchasePrice).Append(" changed to ").Append(PurchasePrice).Append(". ");
+>>>>>>> master
         }
         if ( !Stock.Equals(OldStock) )
         {
@@ -137,6 +141,14 @@
     {
         var db = Database.Open("Cafeen");
 
+<<<<<<< HEAD
+    public static void UpdateCountType(string CountType)
+    {
+        var db = Database.Open("Cafeen");
+        db.Execute("UPDATE Products SET CountType=@0", CountType);
+
+    } 
+=======
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         if ( !NewCategory.Equals(OldCategory) )
         {
@@ -151,5 +163,6 @@
         var comment = sb.ToString();
         db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
     }
+>>>>>>> master
 
 }
