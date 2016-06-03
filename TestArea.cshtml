@@ -4,69 +4,135 @@
 
     var db = Database.Open("Cafeen");
 
-    string msg = "Is the product missing from the table?: ";
+    string StartCondition = "Start conditions: ";
+    string AddProduct_test = "AddNewProduct: ";
+    string AddProduct_log = "ChangeRegistered: ";
+    string EditProduct_test = "EditProduct: ";
+    string EditProduct_log = "ChangeRegistered: ";
+    string EditProduct_Event = "TestName changed to TestRename. Category Sodavand changed to TestCategory. Price of 12 changed to 5. Purchase Price of 8 changed to 5. Stock of 120 changed to 5.";
+    string EditProductCategory_test = "EditProduct (change category): ";
+    string DeleteProduct_test = "DeleteProduct: ";
+    string DeleteProduct_log = "ChangeRegistered ";
     string SearchWord = "TestName";
     string ProductID = "";
 
 
     if(!IsPost){
+
+        //-------------------------------------------Startconditions--------------------------------------//
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {
-            msg += "No ";
+            StartCondition += "Failed";
         }
         else
         {
-            msg += "Yes ";
+            StartCondition += "Passed";
         }
+
+        //--------------------------------------------AddNewProduct------------------------------------//
 
         Funcs.AddNewProduct("TestName", "Sodavand", 12.00, 8.00, 120);
+        Funcs.ChangeRegistered("TestName", "Sodavand", 0.00);
 
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {
-            msg += "Is the product in the table after insertion?: Yes ";
+            AddProduct_test += "Passed";
         }
         else
         {
-            msg += "Is the product in the table after insertion?: No ";
+            AddProduct_test += "Failed";
         }
+
+        if (db.QueryValue("SELECT COUNT(*) FROM Log WHERE Event = '0 TestName added to database under the category Sodavand.'") > 0)
+        {
+            AddProduct_log += "Passed";
+        }
+        else
+        {
+            AddProduct_log += "Failed";
+        }
+
+        db.Execute("DELETE FROM Log WHERE Event = '0 TestName added to database under the category Sodavand.'");
 
         ProductID = db.QueryValue("SELECT ID FROM Products WHERE ProductName = '"+ SearchWord + "'").ToString();
 
-        Funcs.EditProduct("TestName", "TestCategory", 12.00, 8.00, 120, ProductID);
+
+        //-----------------------------------------EditProduct---------------------------------------------//
+
+        Funcs.EditProduct("TestRename", "TestCategory", 5.00, 5.00, 5, ProductID);
+        Funcs.ChangeRegistered(Convert.ToString(ProductID), "TestName", "Sodavand", "12", "8", "120");
 
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE Category = 'TestCategory'") > 0)
         {
-            msg += "Has the product been changed?: Yes ";
+            EditProduct_test += "Passed";
         }
         else
         {
-            msg += "Has the product been changed?: No ";
+            EditProduct_test += "Failed";
         }
 
+        if (db.QueryValue("SELECT COUNT(*) FROM Log WHERE Event = '"+ EditProduct_Event + "'") > 0)
+        {
+            EditProduct_log += "Passed";
+        }
+        else
+        {
+            EditProduct_log += "Failed";
+        }
+
+        db.Execute("DELETE FROM Log WHERE Event = '"+ EditProduct_Event + "'");
+
+        //Changinging products in a category
+
+        Funcs.AddNewProduct("TestNameDeux", "TestCategoryDeux", 12.00, 8.00, 120);
+        Funcs.AddNewProduct("TestNameTrois", "TestCategoryDeux", 12.00, 8.00, 120);
+        Funcs.EditProduct("TestCategoryDeux", "TestCategoryTrois", 10.00);
+        
+        if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE Category = 'TestCategoryTrois' AND Price = '10'") > 1)
+        {
+            EditProductCategory_test += "Passed";
+        }
+        else
+        {
+            EditProductCategory_test += "Failed";
+        }
+
+        db.Execute("DELETE FROM Products WHERE Category = 'TestCategoryTrois'");
+
+        //-----------------------------------------DeleteProduct-----------------------------------------//
+
         Funcs.DeleteProduct(ProductID);
+        Funcs.ChangeRegistered(ProductID, "TestRename");
 
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {
-            msg += "Has the product been deleted?: No ";
+            DeleteProduct_test += "Failed";
         }
         else
         {
-            msg += "Has the product been deleted?: Yes ";
+            DeleteProduct_test += "Passed";
         }
+                
+        if (db.QueryValue("SELECT COUNT(*) FROM Log WHERE ProductName = 'TestRename'") > 0)
+        {
+            DeleteProduct_log += "Passed";
+        }
+        else
+        {
+            DeleteProduct_log += "Failed";
+        }
+
+        db.Execute("DELETE FROM Log WHERE ProductName = 'TestRename'");
     }
 }
 
-<p>@msg</p>    
-<p>@ProductID</p>  
-  
+<p>@StartCondition</p>    
+<p>@AddProduct_test</p> 
+<p>@AddProduct_log</p> 
+<p>@EditProduct_test</p>
+<p>@EditProduct_log</p>
+<p>@EditProductCategory_test</p> 
+<p>@DeleteProduct_test</p> 
+<p>@DeleteProduct_log</p>
 
-
-
-
-@*
-<form action="TestArea.cshtml" method="post">
-  something: <input type="text" name="enter name">
-  <input type="submit" name="TestSubmit" value="Add product" />
-</form>
-*@
 
