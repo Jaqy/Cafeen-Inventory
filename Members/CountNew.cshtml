@@ -7,7 +7,7 @@
     var searchTerm = "";
     var CountType = "";
     var selectedData = db.Query(selectCommand, searchTerm);
-    var grid = new WebGrid(source: selectedData, defaultSort: "Category");
+    var grid = new WebGrid(source: selectedData, defaultSort: "Category", rowsPerPage:999);
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
     if( Request["CountOption"] != null){
         CountType = Request["CountOption"];
@@ -25,14 +25,6 @@
         <!--Adds the coloumns that shows the database, + the edit link to update the database-->
 
 <form method="post" action="">
-<p><label>Type of inventory count</label> </p>
-<select name="CountOption">
-    <option value=""></option>
-    <option value="Opening">Opening</option>
-    <option value="Closing">Closing</option>
-    <option value="SpecialEventOpening">Special Event Opening</option>
-    <option value="SpecialEventClosing">Special Event Closing</option>
-</select>
     <div>
         @grid.GetHtml(
             tableStyle: "grid",
@@ -46,6 +38,14 @@
             )
         )
     </div>
+    <p><label>Type of inventory count</label> </p>
+<select name="CountOption">
+    <option value=""></option>
+    <option value="Opening">Opening</option>
+    <option value="Closing">Closing</option>
+    <option value="SpecialEventOpening">Special Event Opening</option>
+    <option value="SpecialEventClosing">Special Event Closing</option>
+</select>
     <input type="Submit" value="Save Count" />
 
 </form>

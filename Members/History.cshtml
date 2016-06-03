@@ -20,7 +20,15 @@
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
         CountType = Request["CountOption"];
-        selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1 AND CountType = @2";
+        if ( CountType == "")
+        {
+            selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1";
+        }
+        else 
+        {
+            selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1 AND CountType = @2";
+        }
+        
     }
 
     var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End, CountType);
