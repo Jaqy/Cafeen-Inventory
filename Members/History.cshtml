@@ -12,16 +12,18 @@
 
     var searchTerm_Start = "";
     var searchTerm_End = "";
+    var CountType = "";
 
     var selectCommand = "SELECT * FROM History";
   
     if (IsPost && Validation.IsValid()) {
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
-        selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1";
+        CountType = Request["CountOption"];
+        selectCommand ="SELECT * FROM History WHERE Date >= @0 AND Date <= @1 AND CountType = @2";
     }
 
-    var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End);
+    var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End, CountType);
     var grid = new WebGrid(source: SelectedData, defaultSort: "Date", rowsPerPage:50);
 }
 
@@ -36,7 +38,15 @@
                 End Date: <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
                 @Html.ValidationMessage("EndDate")
                 </p>
-                <input type="Submit" value="Search Date"/>
+             <p><label>Type of inventory count</label> </p>
+             <select name="CountOption">
+                <option value=""></option>
+                <option value="Opening">Opening</option>
+                <option value="Closing">Closing</option>
+                <option value="SpecialEventOpening">Special Event Opening</option>
+                <option value="SpecialEventClosing">Special Event Closing</option>
+              </select>
+                <input type="Submit" value="Search"/>
                 <hr/>
                     @grid.GetHtml(
                     tableStyle: "grid",
@@ -48,7 +58,8 @@
                         grid.Column("Price"),
                         grid.Column("PurchasePrice"),
                         grid.Column("Stock"),
-                        grid.Column("Date")
+                        grid.Column("CountType"),
+                        grid.Column("Date", format:@<text> @item.Date.ToString("dd-MM-yy")</text>)
             )
         )
                 
