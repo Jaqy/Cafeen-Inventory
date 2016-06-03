@@ -1,5 +1,5 @@
 ﻿@using System.Web.Mvc;
-@using System.Text;
+@using System.Text; <!--Used to gain access the StringBuilderClass-->
 @functions {
 
 
@@ -25,13 +25,15 @@
     }
     
     //This overloaded function sets a new price and category for all products within a given category. It is used on EditCategory.cshtml
-    public static void EditProduct(string Category, string NewCategory, double NewPrice)  {
+    public static void EditProduct(string Category, string NewCategory, double NewPrice)  
+    {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET Category=@1, Price=@2 WHERE Category=@0", Category, NewCategory, NewPrice);
     }   
 
     //This overloaded function sets a new category for all products within a given category. It is used on EditCategory.cshtml
-    public static void EditProduct(string Category, string NewCategory)  {
+    public static void EditProduct(string Category, string NewCategory)
+    {
         var db = Database.Open("Cafeen");
         db.Execute("UPDATE Products SET Category=@1 WHERE Category=@0", Category, NewCategory);
     }   
@@ -86,15 +88,15 @@
         db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
     }
 
-    //Creates a log event (string) and adds it to the the "Log" tabel, when a product is deleted. Used on DelteProduct.cshtml
+    //Creates a log event (string) and adds it to the the "Log" tabel, when a product is deleted. Used on DeleteProduct.cshtml
     public static void ChangeRegistered(string ProductID, string ProductName)
     {
         var db = Database.Open("Cafeen");
         string comment = "Product " + ProductName + " with ID '" + ProductID + "' deleted.";
         db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, ProductName); 
     }
-
-    //Creates a log event (string) and adds it to the the "Log" tabel, when a a product is changed in generel. Used on EditProduct.cshtml
+        
+    //Creates a log event (string) and adds it to the the "Log" tabel, when a a product is changed in general. Used on EditProduct.cshtml
     public static void ChangeRegistered(string ProductID, string OldProductName, string OldCategory, string OldPrice, string OldPurchasePrice, string OldStock)
     {
         var db = Database.Open("Cafeen");
