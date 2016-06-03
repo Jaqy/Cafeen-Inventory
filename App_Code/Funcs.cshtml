@@ -82,9 +82,6 @@
     public static void ChangeRegistered(string Category)
     {
         var db = Database.Open("Cafeen");
-
-        db.Execute("INSERT INTO History (ID, ProductName, Category, Price, PurchasePrice, Stock, CountType) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock, CountType FROM Products");
-
         string comment = "New category called " + Category + " created.";
         db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
     }
