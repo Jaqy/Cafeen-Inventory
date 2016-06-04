@@ -66,7 +66,7 @@
                     headerStyle: "head",
                     alternatingRowStyle: "alt",
                     columns: grid.Columns(
-                        grid.Column("Date"),
+                        grid.Column("Date", format:@<text> @item.Date.ToString("dd-MM-yyyy")</text>),
                         grid.Column("ProductName"),
                         grid.Column("Event")
             )
