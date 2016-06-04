@@ -29,17 +29,16 @@
 
     <h2>Inventory List Date: @DateTime.Now </h2>
     <form method="get">
-        <div><!--This code handles the category search-->
-             <label for="searchCategory">Category to look for:</label>
-             <input type="text" name="searchCategory" value="@Request.QueryString["searchCategory"]" />
-             <input type="Submit" value="Search Category" /><br/>
-             (Leave blank to list all products.)<br/>
-        </div>
-        <div><!--This code handles the Product Name search -->
-            <label for="SearchProductName">Product to look for:</label>
-             <input type="text" name="searchProductName" value="@Request.QueryString["searchProductName"]" />
-             <input type="Submit" value="Search ProductName" /><br/>
-        </div>
+        <fieldset>
+        <!--This code handles the category search-->
+             <p><label class="field" for="searchCategory">Category to look for:</label><input type="text" name="searchCategory" class="textbox-200" value="@Request.QueryString["searchCategory"]" />
+             <input type="Submit" class="Products" value="Search Category"/></p>
+        
+        <!--This code handles the Product Name search -->
+             <p><label class="field" for="SearchProductName">Product to look for:</label><input type="text" name="searchProductName" class="textbox-200" value="@Request.QueryString["searchProductName"]" />
+             <input type="Submit" class="Products" value="Search ProductName" /></p>
+        
+        </fieldset>
     </form>
         <!--Adds the coloumns that shows the database, + the edit link + the delete link-->
     <div>
