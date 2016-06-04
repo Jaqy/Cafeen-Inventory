@@ -61,16 +61,16 @@
   <form method="post">
     <fieldset>
       <legend>Add product to database</legend>
-      <p><label for="ProductName">Product Name:</label>
+      <p><label class="field" for="ProductName">Product Name:</label>
          <input type="text" name="ProductName" value="@Request.Form["ProductName"]" />
           @Html.ValidationMessage("ProductName")
       </p>
 
 
 <!--Dropdown shows all the categorys-->
-    <p><label for="Category">Category:</label>
+    <p><label class="field" for="Category">Category:</label>
 <form name="FormCategory" method="post">
-  <select name="ListCategory">
+  <select name="ListCategory" style="width: 162px;">
             @foreach(var row in CategoryData)
             {
                 <option value="@row.Category">@row.Category</option>
@@ -81,11 +81,11 @@
 <!--Checkbox if the user wants a new category-->      
   <div>
     @Html.CheckBox("CategoryCheckbox", new { value = "true" })
-    <label for="CategoryCheckbox">Add new category?</label>
+    <label class="field" for="CategoryCheckbox">Add new category?</label>
 
 <!--Shows the inputbox for a new category, if the "Add new category" is checkt-->
     <div class="reveal-if-active">
-      <p><label for="Price">New category:</label>
+      <p><label class="field" for="Price">New category:</label>
          <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
 
       </p>
@@ -94,18 +94,18 @@
         
 <!--All the user input boxes is created-->             
         </p>
-      <p><label for="Price">Price:</label>
+      <p><label class="field" for="Price">Price:</label>
          <input type="number" name="Price" value="@Request.Form["Price"]" />
 
           @Html.ValidationMessage("Price")
       </p>
 
-      <p><label for="PurchasePrice">Purchase Price:</label>
+      <p><label class="field" for="PurchasePrice">Purchase Price:</label>
          <input type="number" name="PurchasePrice" value="@Request.Form["PurchasePrice"]" />
           @Html.ValidationMessage("PurchasePrice")
       </p>
 
-      <p><label for="Stock">Stock:</label>
+      <p><label class="field" for="Stock">Stock:</label>
          <input type="number" name="Stock" value="@Request.Form["Stock"]" />
           @Html.ValidationMessage("Stock")
       </p>

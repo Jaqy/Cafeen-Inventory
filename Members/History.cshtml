@@ -38,22 +38,22 @@
 <h1>Search through history</h1>
 <form method="post">
         <div id="grid">
-                <p>
-                Start Date: <input type="text" name="StartDate" id="datepicker" size="30" value="@Request.QueryString["StartDate"]" />
+                <p><label class="logField" for="StartDate">Start Date:</label><input type="text" name="StartDate" id="datepicker" size="21" value="@Request.QueryString["StartDate"]" />
                 @Html.ValidationMessage("StartDate")
                 </p>
                 <p>
-                End Date: <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
+                <p><label class="logField" for="EndDate">End Date:</label><input type="text" name="EndDate" id="datepicker2" size="21" value="@Request.QueryString["EndDate"]" />
                 @Html.ValidationMessage("EndDate")
                 </p>
-             <p><label>Type of inventory count</label> </p>
+             <p><label class="logField" for="CountOptions">Count type:</label>
              <select name="CountOption">
                 <option value=""></option>
                 <option value="Opening">Opening</option>
                 <option value="Closing">Closing</option>
                 <option value="SpecialEventOpening">Special Event Opening</option>
                 <option value="SpecialEventClosing">Special Event Closing</option>
-              </select>
+             </select>
+             </p>
                 <input type="Submit" value="Search"/>
                 <hr/>
                     @grid.GetHtml(

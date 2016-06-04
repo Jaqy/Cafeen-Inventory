@@ -59,12 +59,10 @@
   <h1>Edit a category</h1>
   <form method="post">
     <fieldset>
-      <legend>Edit categories in database</legend>
-
 <!--Shows all the categorys in dropdown-->
-    <p><label for="Category">Category:</label>
+    <p><label class="field" for="Category">Category:</label>
 <form name="FormCategory" method="post">
-  <select name="ListCategory">
+  <select name="ListCategory" style="width: 161px;">
             @foreach(var row in CategoryData)
             {
                 <option value="@row.Category">@row.Category</option>
@@ -74,19 +72,19 @@
 
 <!--All the userinput-->
 <!--Userinput for Category name-->
-      <p><label for="NewCategory">New category name:</label>
+      <p><label class="field" for="NewCategory">New category name:</label>
          <input type="text" name="NewCategory" value="@Request.Form["NewCategory"]" />
           @Html.ValidationMessage("Stock")
       </p>
         
 <!--The checkbox if the user wants a new price-->         
   <div>
-    @Html.CheckBox("NewPriceCheckbox", new { value = "true" })
-    <label for="NewPriceCheckbox">Do you want to change all prices for the edited category?</label>
+    <label class="field" for="NewPriceCheckbox">Change prices?</label>
+    @Html.CheckBox("NewPriceCheckbox", new { value = "true" })    
 
 <!--Shows the inputbox for a new price, if the "New Price" checkbox is checkt-->
     <div class="reveal-if-active">
-      <p><label for="NewPrice">New price:</label>
+      <p><label class="field" for="NewPrice">New price:</label>
          <input type="number" name="NewPrice" value="0.0" />
 
       </p>

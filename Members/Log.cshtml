@@ -43,16 +43,16 @@
 <h1>Search through Log files</h1>
 <form method="post">
         <div id="grid">
-                <p>
-                Start Date: <input type="text" name="StartDate" id="datepicker" size="30" value="@Request.QueryString["StartDate"]" />
+                
+                <p><label class="logField" for="StartDate">Start Date:</label><input type="text" name="StartDate" id="datepicker" size="20" value="@Request.QueryString["StartDate"]" />
                 @Html.ValidationMessage("StartDate")
                 </p>
-                <p>
-                End Date: <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
+                
+                <p><label class="logField" for="EndDate">End Date:</label><input type="text" name="EndDate" id="datepicker2" size="20" value="@Request.QueryString["EndDate"]" />
                 @Html.ValidationMessage("EndDate")
                 </p>
-                <p>
-                Product to look for: <input type="text" name="searchProductName" value="@Request.QueryString["searchProductName"]" />
+               
+                <p><label class="logField" for="searchProductName">Product:</label><input type="text" name="searchProductName" size="20" value="@Request.QueryString["searchProductName"]" />
                 </p>
                 <input type="Submit" value="Search"/>
 
