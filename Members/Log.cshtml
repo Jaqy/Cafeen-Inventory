@@ -1,40 +1,32 @@
 ﻿@{
-
     Page.title = "Log";
-
 
     <!--Validates that there is a genuine input in the fields so no blanks is created-->
     Validation.RequireField("StartDate", "You haven't entered a start date");
     Validation.RequireField("EndDate", "You haven't entered an end date");
 
-
     var db = Database.Open("Cafeen");
-
-    //This variabel is used for searching for a product name. 
     var searchTerm = "";
-
-    //The two variables below are used when search for dates or date intervals.
     var searchTerm_Start = "";
     var searchTerm_End = "";
-
     var selectCommand = "SELECT * FROM Log";
         
- 
-    if (IsPost && Validation.IsValid() ) {
+    if (IsPost && Validation.IsValid() ) 
+        {
         searchTerm = Request["searchProductName"];
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
 
         if( searchTerm.Equals("") )
-        {
+            {
             selectCommand ="SELECT * FROM Log WHERE Date >= @0 AND Date <= @1";            
-        }
+            }
         else
-        {
+            {
             selectCommand ="SELECT * FROM Log WHERE Date >= @0 AND Date <= @1 AND ProductName = @2"; 
-        }
+            }
         
-    }
+        }
 
     var SelectedData = db.Query(selectCommand, searchTerm_Start, searchTerm_End, searchTerm);
     var grid = new WebGrid(source: SelectedData, defaultSort: "Date", rowsPerPage:50);
@@ -42,60 +34,69 @@
 
 <h1>Search through Log files</h1>
 <form method="post">
-        <div id="grid">
+    <div id="grid">
                 
-                <p><label class="logField" for="StartDate">Start Date:</label><input type="text" name="StartDate" id="datepicker" size="20" value="@Request.QueryString["StartDate"]" />
-                @Html.ValidationMessage("StartDate")
-                </p>
+        <p>
+            <label class="logField" for="StartDate">Start Date:</label>
+            <input type="text" name="StartDate" id="datepicker" size="20" value="@Request.QueryString["StartDate"]" />
+            @Html.ValidationMessage("StartDate")
+        </p>
                 
-                <p><label class="logField" for="EndDate">End Date:</label><input type="text" name="EndDate" id="datepicker2" size="20" value="@Request.QueryString["EndDate"]" />
-                @Html.ValidationMessage("EndDate")
-                </p>
+        <p>
+            <label class="logField" for="EndDate">End Date:</label>
+            <input type="text" name="EndDate" id="datepicker2" size="20" value="@Request.QueryString["EndDate"]" />
+            @Html.ValidationMessage("EndDate")
+        </p>
                
-                <p><label class="logField" for="searchProductName">Product:</label><input type="text" name="searchProductName" size="20" value="@Request.QueryString["searchProductName"]" />
-                </p>
-                <input type="Submit" value="Search"/>
+        <p>
+            <label class="logField" for="searchProductName">Product:</label><input type="text" name="searchProductName" size="20" value="@Request.QueryString["searchProductName"]" />
+        </p>
+                
+        <input type="Submit" value="Search"/>
 
-
-
-
-
-                <hr/>
-                    @grid.GetHtml(
-                    tableStyle: "grid",
-                    headerStyle: "head",
-                    alternatingRowStyle: "alt",
-                    columns: grid.Columns(
-                        grid.Column("Date", format:@<text> @item.Date.ToString("dd-MM-yyyy")</text>),
-                        grid.Column("ProductName"),
-                        grid.Column("Event")
-            )
-        )
+            <hr/>
+                @grid.GetHtml(
+                tableStyle: "grid",
+                headerStyle: "head",
+                alternatingRowStyle: "alt",
+                columns: grid.Columns(
+                    grid.Column("Date", format:@<text> @item.Date.ToString("dd-MM-yyyy")</text>),
+                    grid.Column("ProductName"),
+                    grid.Column("Event")
+                    )
+                )
                 
         </div>
 </form>
+
 <!--Dette er jQuery Datepicker, som kaldes når griddet laves ovenfor i vores grid.-->
-  <title>jQuery UI Datepicker - Format date</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script>
-  $(function() {
-    $( "#datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
-    $( "#format" ).change(function() {
-      $( "#datepicker" ).datepicker( "option", "dateFormat", $( this ).val() );
-    });
-  });
-  </script>
-  <script>
-    $(function() {
-    $( "#datepicker2" ).datepicker({ dateFormat: 'dd-mm-yy' });
-    $( "#format" ).change(function() {
-      $( "#datepicker2" ).datepicker( "option", "dateFormat", $( this ).val() );
-    });
-  });
-  </script>
+<title>jQuery UI Datepicker - Format date</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+  
+<script>
+    $(function() 
+        {
+        $( "#datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
+        $( "#format" ).change(function() 
+            {
+            $( "#datepicker" ).datepicker( "option", "dateFormat", $( this ).val() );
+            });
+        });
+</script>
+  
+<script>
+    $(function() 
+        {
+        $( "#datepicker2" ).datepicker({ dateFormat: 'dd-mm-yy' });
+        $( "#format" ).change(function() 
+            {
+            $( "#datepicker2" ).datepicker( "option", "dateFormat", $( this ).val() );
+            });
+        });
+</script>
  
 
  

@@ -1,6 +1,6 @@
 ﻿ 
 @{
-    Page.title = "Count"; 
+    Page.title = "Inventory Count"; 
 
     var db = Database.Open("Cafeen") ;
     var selectCommand = "SELECT * FROM Products";
@@ -9,21 +9,28 @@
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Category", rowsPerPage:999);
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
-    if( Request["CountOption"] != null){
-        CountType = Request["CountOption"];
-    }
     
-    if(IsPost){
+    if( Request["CountOption"] != null)
+        {
+        CountType = Request["CountOption"];
+        }
+    
+    if(IsPost)
+        {
         db.Execute("UPDATE Products SET CountType=@0", CountType);
-        Funcs.AddLogData(); //Hvis siden genfriskes vha. af submit, da tilføjes data'en fra Products tabellen til Logs tabellen.
+        
+        <!--Creates a log of the inventory list to history databasen-->
+        Funcs.AddLogData();
         Response.Redirect("~/Members/Products.cshtml");
-    }
+        }
 
 }
+
+
 <h2>Inventory List</h2>
 <h3>Date: @DateTime.Now</h3>
-        <!--Adds the coloumns that shows the database, + the edit link to update the database-->
 
+<!--Creat a tabel with all the products in the inventory-->
 <form method="post" action="">
     <div>
         @grid.GetHtml(
@@ -38,15 +45,20 @@
             )
         )
     </div>
-    <p><label>Type of inventory count</label> </p>
-<select name="CountOption">
-    <option value=""></option>
-    <option value="Opening">Opening</option>
-    <option value="Closing">Closing</option>
-    <option value="SpecialEventOpening">Special Event Opening</option>
-    <option value="SpecialEventClosing">Special Event Closing</option>
-</select>
-    <input type="Submit" value="Save Count" />
+
+<!--Option to select the different type of inventory counts you can register-->
+<p>
+    <label>Type of inventory count</label>
+</p>
+    <select name="CountOption">
+        <option value=""></option>
+        <option value="Opening">Opening</option>
+        <option value="Closing">Closing</option>
+        <option value="SpecialEventOpening">Special Event Opening</option>
+        <option value="SpecialEventClosing">Special Event Closing</option>
+    </select>
+
+<input type="Submit" value="Save Count" />
 
 </form>
 

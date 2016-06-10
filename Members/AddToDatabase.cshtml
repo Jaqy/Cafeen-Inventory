@@ -18,98 +18,111 @@
 
     <!--Opens the database and inserts the data from above-->
     var db = Database.Open("Cafeen");
+
     <!--Collect the Category from the Database-->
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
     <!--The if statement starts if the user clicks on the "Update Category" and indputs the produck into the Database, if the input is valid.-->
     if(IsPost && Validation.IsValid())
-    {
+        {
         <!--Handle all the user inputs-->
         ProductName = Request.Form["ProductName"];
         Category = Request["ListCategory"];
         AltCategory = Request["AltCategory"];
+
         <!--Convert all the user inputs to the desired type-->
         Price = Convert.ToDouble(Request.Form["Price"]);
         PurchasePrice = Convert.ToDouble(Request.Form["PurchasePrice"]);
         Stock = Convert.ToDouble(Request.Form["Stock"]);
         bool CategoryCheckbox = Request["CategoryCheckbox"].AsBool();
+
         <!--Add as a new category if the user has checkt the "Add new category" checkbox-->
         if(CategoryCheckbox)
-        {
+            {
             <!--The user makes a new category and add id to the Database-->
             Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock);
+            
             //Creates a log entry for the creation of the new category.
             Funcs.ChangeRegistered(AltCategory); 
+            
             //Creates a log entry for the new product.
             Funcs.ChangeRegistered(ProductName, AltCategory, Stock);
-
-        }
+            }
+        
         else
-        {
+            {
             <!--Uses the category chosen from the dropdown, and add it to the Databese-->
             Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock);
+
             //Creates a log entry for the new product.
             Funcs.ChangeRegistered(ProductName, Category, Stock);
-        }
+            }
+
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");
     }
 }
 
 <!--Creates the form to enter in new data to the database-->
-  <h1>Add a product</h1>
-  <form method="post">
+<h1>Add a product</h1>
+<form method="post">
     <fieldset>
-      <legend>Add product to database</legend>
-      <p><label class="field" for="ProductName">Product Name:</label>
-         <input type="text" name="ProductName" value="@Request.Form["ProductName"]" />
-          @Html.ValidationMessage("ProductName")
-      </p>
-
+        <legend>Add product to database</legend>
+        <p>
+            <label class="field" for="ProductName">Product Name:</label>
+            <input type="text" name="ProductName" value="@Request.Form["ProductName"]" />
+            @Html.ValidationMessage("ProductName")
+        </p>
 
 <!--Dropdown shows all the categorys-->
-    <p><label class="field" for="Category">Category:</label>
+<p><label class="field" for="Category">Category:</label></p>
 <form name="FormCategory" method="post">
-  <select name="ListCategory" style="width: 162px;">
-            @foreach(var row in CategoryData)
+    <select name="ListCategory" style="width: 162px;">
+        @foreach(var row in CategoryData)
             {
-                <option value="@row.Category">@row.Category</option>
+            <option value="@row.Category">@row.Category</option>
             }
-   </select>
+    </select>
 </form>  
         
 <!--Checkbox if the user wants a new category-->      
-  <div>
+<div>
     @Html.CheckBox("CategoryCheckbox", new { value = "true" })
     <label class="field" for="CategoryCheckbox">Add new category?</label>
 
 <!--Shows the inputbox for a new category, if the "Add new category" is checkt-->
     <div class="reveal-if-active">
-      <p><label class="field" for="Price">New category:</label>
-         <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
-
-      </p>
+    <p>
+        <label class="field" for="Price">New category:</label>
+        <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
+    </p>
     </div>
-  </div>     
+</div>     
         
 <!--All the user input boxes is created-->             
-        </p>
-      <p><label class="field" for="Price">Price:</label>
-         <input type="number" name="Price" value="@Request.Form["Price"]" />
-          @Html.ValidationMessage("Price")
-      </p>
+<p>
+    <label class="field" for="Price">Price:</label>
+    <input type="number" name="Price" value="@Request.Form["Price"]" />
+    @Html.ValidationMessage("Price")
+</p>      
 
-      <p><label class="field" for="PurchasePrice">Purchase Price:</label>
-         <input type="number" name="PurchasePrice" value="@Request.Form["PurchasePrice"]" />
-          @Html.ValidationMessage("PurchasePrice")
-      </p>
+<p>
+    <label class="field" for="PurchasePrice">Purchase Price:</label>
+    <input type="number" name="PurchasePrice" value="@Request.Form["PurchasePrice"]" />
+    @Html.ValidationMessage("PurchasePrice")
+</p>
 
-      <p><label class="field" for="Stock">Stock:</label>
-         <input type="number" name="Stock" value="@Request.Form["Stock"]" />
-          @Html.ValidationMessage("Stock")
-      </p>
+<p>
+    <label class="field" for="Stock">Stock:</label>
+    <input type="number" name="Stock" value="@Request.Form["Stock"]" />
+    @Html.ValidationMessage("Stock")
+</p>
 
 <!--The submit button is created-->
-      <p><input type="submit" name="buttonSubmit" value="Add product" /></p>
-    </fieldset>
-  </form>
+<p>
+    <input type="submit" name="buttonSubmit" value="Add product" />
+</p>
+
+</fieldset>
+
+</form>

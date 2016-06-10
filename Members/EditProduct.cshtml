@@ -22,34 +22,38 @@
 
     <!--Handles the first time the user enters the page.-->
     if(!IsPost)
-    {
+        {
         <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
+        
         if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
             {
             ProductID = Request.QueryString["ID"];
 
             <!--if the row is equal to null skip then we skip because we will get an error if we try and get informaiton out of an empty row.-->
             if(rows != null)
-            {
+                {
                 ProductName = rows.ProductName;
                 Category = rows.Category;
                 Price = rows.Price;
                 PurchasePrice = rows.PurchasePrice;
                 Stock = rows.Stock;
-            } 
-                else 
-            {
+                } 
+            
+            else 
+                {
                 Validation.AddFormError("No Product was found for that ID.");
-            }
+                }
             }
         else
-        {
+            {
             <!--This line produces an error message, in case the user presses the update product button after having entered the page without a Product ID-->
             Validation.AddFormError("No Product was selected.");
+            }
         }
-    }
 
-    if(IsPost){ <!--If the update product button is pressed, we require all 4 fields to be filled out, and then request what's inside the fields.-->
+    if(IsPost)
+        { 
+        <!--If the update product button is pressed, we require all 4 fields to be filled out, and then request what's inside the fields.-->
         Validation.RequireField("ProductName", "You haven't entered a Product Name");
         Validation.RequireField("Category", "You haven't entered a Category");
         Validation.RequireField("Price", "You haven't entered a Price");
@@ -65,52 +69,62 @@
         ProductID = Request.Form["ProductID"];
 
         <!--Opens the database and updates the product information, by calling the EditProduct command with the values set above.-->
-        if(Validation.IsValid()){
+        if(Validation.IsValid())
+            {
             Funcs.EditProduct(ProductName, Category, Price, PurchasePrice, Stock, ProductID);
             Funcs.ChangeRegistered(ProductID, OldProductName, OldCategory, OldPrice, OldPurchasePrice, OldStock);
             Response.Redirect("~/Members/Products.cshtml");
+            }
         }
-    }
 }
 
 
 
 <!--Creates the new tables and positions the validation error message to the end of every line-->
-  <h1>Edit a Product</h1>
-  <form method="post">
+<h1>Edit a Product</h1>
+<form method="post">
     <fieldset>
-      <legend>Add product to database</legend>
-      <p><label for="ProductName">Product Name:</label>
-         <input type="text" name="ProductName" value="@ProductName" />
-         @Html.ValidationMessage("ProductName")
-      </p>
+        <legend>Add product to database</legend>
+        <p>
+            <label for="ProductName">Product Name:</label>
+            <input type="text" name="ProductName" value="@ProductName" />
+            @Html.ValidationMessage("ProductName")
+        </p>
 
-      <p><label for="Category">Category:</label>
-         <input type="text" name="Category" value="@Category" />
-         @Html.ValidationMessage("Category")
-      </p>
+        <p>
+            <label for="Category">Category:</label>
+            <input type="text" name="Category" value="@Category" />
+            @Html.ValidationMessage("Category")
+        </p>
 
-      <p><label for="Price">Price:</label>
-         <input type="number" name="Price" value="@Price" />
-         @Html.ValidationMessage("Price")
-      </p>
+        <p>
+            <label for="Price">Price:</label>
+            <input type="number" name="Price" value="@Price" />
+            @Html.ValidationMessage("Price")
+        </p>
 
-      <p><label for="PurchasePrice">Purchase Price:</label>
-         <input type="number" name="PurchasePrice" value="@PurchasePrice"/>
-         @Html.ValidationMessage("PurchasePrice")
-      </p>
+        <p>
+            <label for="PurchasePrice">Purchase Price:</label>
+            <input type="number" name="PurchasePrice" value="@PurchasePrice"/>
+            @Html.ValidationMessage("PurchasePrice")
+        </p>
 
-      <p><label for="Stock">Stock:</label>
-         <input type="number" name="Stock" value="@Stock"/>
-         @Html.ValidationMessage("Stock")
-      </p>
+        <p>
+            <label for="Stock">Stock:</label>
+            <input type="number" name="Stock" value="@Stock"/>
+             @Html.ValidationMessage("Stock")
+        </p>
 
-      <!--Gives the product a hidden ID to be used to restore information about the ID from the database-->
-      <input type="hidden" name="ProductID" value="@ProductID" />
+        <!--Gives the product a hidden ID to be used to restore information about the ID from the database-->
+        <input type="hidden" name="ProductID" value="@ProductID" />
 
-      <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
+        <p>
+            <input type="submit" name="buttonSubmit" value="Submit Changes" />
+        </p>
+        
     </fieldset>
-  </form>
-    <p>
-        <a href="~/Members/Products.cshtml">Return to product listings</a>
-    </p>
+</form>
+    
+<p>
+    <a href="~/Members/Products.cshtml">Return to product listings</a>
+</p>
