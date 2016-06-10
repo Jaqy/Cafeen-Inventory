@@ -20,7 +20,7 @@
         db.Execute("UPDATE Products SET CountType=@0", CountType);
         
         <!--Creates a log of the inventory list to history databasen-->
-        Funcs.AddLogData();
+        Funcs.AddHistoryData();
         Response.Redirect("~/Members/Products.cshtml");
         }
 

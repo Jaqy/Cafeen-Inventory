@@ -51,7 +51,7 @@
             ProductName = rows.ProductName;
 
             //Creates log entry for the deletion of the product.
-            Funcs.ChangeRegistered(ProductID, ProductName);
+            Funcs.SaveLogData(ProductID, ProductName);
 
             //Deletes the product from the Products table.
             Funcs.DeleteProduct(ProductID);

@@ -6,13 +6,13 @@
 
     string StartCondition = "Start conditions: ";
     string AddProduct_test = "AddNewProduct: ";
-    string AddProduct_log = "ChangeRegistered: ";
+    string AddProduct_log = "SaveLogData: ";
     string EditProduct_test = "EditProduct: ";
-    string EditProduct_log = "ChangeRegistered: ";
+    string EditProduct_log = "SaveLogData: ";
     string EditProduct_Event = "TestName changed to TestRename. Category Sodavand changed to TestCategory. Price of 12 changed to 5. Purchase Price of 8 changed to 5. Stock of 120 changed to 5.";
     string EditProductCategory_test = "EditProduct (change category): ";
     string DeleteProduct_test = "DeleteProduct: ";
-    string DeleteProduct_log = "ChangeRegistered ";
+    string DeleteProduct_log = "SaveLogData ";
     string SearchWord = "TestName";
     string ProductID = "";
 
@@ -32,7 +32,7 @@
         //--------------------------------------------AddNewProduct------------------------------------//
 
         Funcs.AddNewProduct("TestName", "Sodavand", 12.00, 8.00, 120);
-        Funcs.ChangeRegistered("TestName", "Sodavand", 0.00);
+        Funcs.SaveLogData("TestName", "Sodavand", 0.00);
 
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {
@@ -60,7 +60,7 @@
         //-----------------------------------------EditProduct---------------------------------------------//
 
         Funcs.EditProduct("TestRename", "TestCategory", 5.00, 5.00, 5, ProductID);
-        Funcs.ChangeRegistered(Convert.ToString(ProductID), "TestName", "Sodavand", "12", "8", "120");
+        Funcs.SaveLogData(Convert.ToString(ProductID), "TestName", "Sodavand", "12", "8", "120");
 
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE Category = 'TestCategory'") > 0)
         {
@@ -102,7 +102,7 @@
         //-----------------------------------------DeleteProduct-----------------------------------------//
 
         Funcs.DeleteProduct(ProductID);
-        Funcs.ChangeRegistered(ProductID, "TestRename");
+        Funcs.SaveLogData(ProductID, "TestRename");
 
         if (db.QueryValue("SELECT COUNT(*) FROM Products WHERE ProductName = '"+ SearchWord + "'") > 0)
         {

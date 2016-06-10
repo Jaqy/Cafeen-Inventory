@@ -55,20 +55,20 @@
         }
     
 
-    //-------------------------------------------------AddLogData----------------------------------------------------\\
+    //-------------------------------------------------AddHistoryData----------------------------------------------------\\
     
-    //This function copies all data from "Products" to the "History" tabel. Used on UpdateStock.cshtml
-    public static void AddLogData()
+    //This function copies all data from "Products" to the "History" tabel. Used on InventoryCount.cshtml
+    public static void AddHistoryData()
         {
         var db = Database.Open("Cafeen");
         db.Execute("INSERT INTO History (ID, ProductName, Category, Price, PurchasePrice, Stock, CountType) SELECT ID, ProductName, Category, Price, PurchasePrice, Stock, CountType FROM Products");
         }
 
 
-    //----------------------------------------------ChangeRegistered----------------------------------------------------\\
+    //----------------------------------------------SaveLogData----------------------------------------------------\\
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a new product is created. Used on AddToDatabase.cshtml
-    public static void ChangeRegistered(string ProductName, string Category, double Stock)
+    public static void SaveLogData(string ProductName, string Category, double Stock)
         {
         var db = Database.Open("Cafeen");
         string comment = Stock + " " + ProductName + " added to database under the category " + Category + ".";
@@ -78,7 +78,7 @@
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a new category is created during the creation of a new product.
     //Used on AddToDatabase.cshtml
-    public static void ChangeRegistered(string Category)
+    public static void SaveLogData(string Category)
         {
         var db = Database.Open("Cafeen");
         string comment = "New category called " + Category + " created.";
@@ -86,7 +86,7 @@
         }
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a product is deleted. Used on DelteProduct.cshtml
-    public static void ChangeRegistered(string ProductID, string ProductName)
+    public static void SaveLogData(string ProductID, string ProductName)
         {
         var db = Database.Open("Cafeen");
         string comment = "Product " + ProductName + " with ID '" + ProductID + "' deleted.";
@@ -94,7 +94,7 @@
         }
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a a product is changed in generel. Used on EditProduct.cshtml
-    public static void ChangeRegistered(string ProductID, string OldProductName, string OldCategory, string OldPrice, string OldPurchasePrice, string OldStock)
+    public static void SaveLogData(string ProductID, string OldProductName, string OldCategory, string OldPrice, string OldPurchasePrice, string OldStock)
         {
         var db = Database.Open("Cafeen");
         var dbCommand = "SELECT * FROM Products WHERE ID = @0";
@@ -135,7 +135,7 @@
 
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a new category is is edited.
-    public static void CategoryChangeRegistered(string NewCategory, string OldCategory, string NewPrice = "")
+    public static void CategorySaveLogData(string NewCategory, string OldCategory, string NewPrice = "")
         {
         var db = Database.Open("Cafeen");
 
@@ -155,6 +155,7 @@
         db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
         }
 
+    //Update the type of count on a product
     public static void UpdateCountType(string CountType)
         {
         var db = Database.Open("Cafeen");

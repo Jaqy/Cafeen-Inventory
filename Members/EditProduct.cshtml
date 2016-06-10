@@ -72,7 +72,7 @@
         if(Validation.IsValid())
             {
             Funcs.EditProduct(ProductName, Category, Price, PurchasePrice, Stock, ProductID);
-            Funcs.ChangeRegistered(ProductID, OldProductName, OldCategory, OldPrice, OldPurchasePrice, OldStock);
+            Funcs.SaveLogData(ProductID, OldProductName, OldCategory, OldPrice, OldPurchasePrice, OldStock);
             Response.Redirect("~/Members/Products.cshtml");
             }
         }

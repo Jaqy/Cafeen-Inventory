@@ -43,10 +43,10 @@
             Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock);
             
             //Creates a log entry for the creation of the new category.
-            Funcs.ChangeRegistered(AltCategory); 
+            Funcs.SaveLogData(AltCategory); 
             
             //Creates a log entry for the new product.
-            Funcs.ChangeRegistered(ProductName, AltCategory, Stock);
+            Funcs.SaveLogData(ProductName, AltCategory, Stock);
             }
         
         else
@@ -55,7 +55,7 @@
             Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock);
 
             //Creates a log entry for the new product.
-            Funcs.ChangeRegistered(ProductName, Category, Stock);
+            Funcs.SaveLogData(ProductName, Category, Stock);
             }
 
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
