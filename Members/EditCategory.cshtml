@@ -39,6 +39,7 @@
             Funcs.CategorySaveLogData(NewCategory, Category, Convert.ToString(NewPrice));
             Funcs.EditProduct(Category, NewCategory, NewPrice); 
 
+            <!--Log entries for each product affected by the change to the category-->
             foreach(var row in affectedProducts)
                 {
                 Funcs.SaveLogData(Convert.ToString(row.ID), row.ProductName, row.Category, Convert.ToString(row.Price), Convert.ToString(row.PurchasePrice), Convert.ToString(row.Stock));
@@ -47,7 +48,7 @@
         
         else
             {
-            <!--The AddNewProduct-function is called without a new price from Funcs.cshtml-->
+            <!--The AddNewProduct-function is called without a new price.-->
             Funcs.EditProduct(Category, NewCategory);
             Funcs.CategorySaveLogData(NewCategory, Category);
             }
