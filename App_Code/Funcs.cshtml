@@ -2,6 +2,16 @@
 @using System.Text;
 @functions {
 
+    //---------------------------------------------GetProductName--------------------------------------------------\\
+
+    public static string GetProductName(string ProductID)
+        {
+        var db = Database.Open("Cafeen");
+        var dbCommand = "SELECT * FROM Products WHERE ID = @0";
+        var rows = db.QuerySingle(dbCommand, ProductID);
+        var ProductName = rows.ProductName;
+        return ProductName;
+        }
 
     //-------------------------------------------------AddProduct----------------------------------------------------\\
 

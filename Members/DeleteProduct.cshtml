@@ -45,10 +45,7 @@
         if(IsPost && !Request["buttonDelete"].IsEmpty())
             {
             ProductID = Request.Form["ProductID"];
-            var db = Database.Open("Cafeen");
-            var dbCommand = "SELECT * FROM Products WHERE ID = @0";
-            var rows = db.QuerySingle(dbCommand, ProductID);
-            ProductName = rows.ProductName;
+            ProductName = Funcs.GetProductName(ProductID);
 
             //Deletes the product from the Products table.
             Funcs.DeleteProduct(ProductID);
