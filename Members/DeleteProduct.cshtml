@@ -50,11 +50,11 @@
             var rows = db.QuerySingle(dbCommand, ProductID);
             ProductName = rows.ProductName;
 
-            //Creates log entry for the deletion of the product.
-            Funcs.SaveLogData(ProductID, ProductName);
-
             //Deletes the product from the Products table.
             Funcs.DeleteProduct(ProductID);
+
+            //Creates log entry for the deletion of the product.
+            Funcs.SaveLogData(ProductID, ProductName);
             Response.Redirect("~/Members/Products");
             }
 }
