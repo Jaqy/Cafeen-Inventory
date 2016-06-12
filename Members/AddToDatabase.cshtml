@@ -11,7 +11,7 @@
     <!--Creates the variables we need to create a new produck.-->
     var ProductName = "";
     var Category = "";
-    var AltCategory = "";
+    var NewCategory = "";
     double Price = 0.0;
     double PurchasePrice = 0.0;
     double Stock = 0.0;
@@ -28,7 +28,7 @@
         <!--Handle all the user inputs-->
         ProductName = Request.Form["ProductName"];
         Category = Request["ListCategory"];
-        AltCategory = Request["AltCategory"];
+        NewCategory = Request["NewCategory"];
 
         <!--Convert all the user inputs to the desired type-->
         Price = Convert.ToDouble(Request.Form["Price"]);
@@ -39,19 +39,19 @@
         <!--Add as a new category during product creation if the user has checked the "Add new category" checkbox-->
         if(CategoryCheckbox)
             {
-            //The user makes a new category and add the new product to the Database
-            Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock);
+            //The user makes a new category and adds the new product to the Database
+            Funcs.AddNewProduct(ProductName, NewCategory, Price, PurchasePrice, Stock);
             
             //Creates a log entry for the creation of the new category.
-            Funcs.SaveLogData(AltCategory); 
+            Funcs.SaveLogData(NewCategory); 
             
             //Creates a log entry for the new product.
-            Funcs.SaveLogData(ProductName, AltCategory, Stock);
+            Funcs.SaveLogData(ProductName, NewCategory, Stock);
             }
         
         else
             {
-            <!--Uses the category chosen from the dropdown, and add it to the Databese-->
+            <!--Uses the category chosen from the dropdown, and add it to the Database-->
             Funcs.AddNewProduct(ProductName, Category, Price, PurchasePrice, Stock);
 
             //Creates a log entry for the new product.
@@ -94,7 +94,7 @@
     <div class="reveal-if-active">
     <p>
         <label class="field" for="Price">New category:</label>
-        <input type="text" name="AltCategory" value="@Request.Form["AltCategory"]" />
+        <input type="text" name="NewCategory" value="@Request.Form["NewCategory"]" />
     </p>
     </div>
 </div>     
