@@ -36,10 +36,10 @@
         Stock = Convert.ToDouble(Request.Form["Stock"]);
         bool CategoryCheckbox = Request["CategoryCheckbox"].AsBool();
 
-        <!--Add as a new category if the user has checkt the "Add new category" checkbox-->
+        <!--Add as a new category during product creation if the user has checked the "Add new category" checkbox-->
         if(CategoryCheckbox)
             {
-            <!--The user makes a new category and add id to the Database-->
+            //The user makes a new category and add the new product to the Database
             Funcs.AddNewProduct(ProductName, AltCategory, Price, PurchasePrice, Stock);
             
             //Creates a log entry for the creation of the new category.
