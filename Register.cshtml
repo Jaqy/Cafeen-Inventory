@@ -28,33 +28,23 @@
         {
         errorMessage = "Passwords don't match.";
         }
-    else 
+
+    if(WebSecurity.UserExists(username))
         {
-        if(WebSecurity.UserExists(username))
-            {
-            <!--Gives an error message in case the user already exists.-->
-            errorMessage = String.Format("User '{0}' already exists.", username);
-            }
-        else
-            {
-            <!--Creates the new user account, and creates the hash entry.-->
-            WebSecurity.CreateUserAndAccount(username,password,null,false);
-            WebSecurity.Login(username, password, true);
-            errorMessage = String.Format("{0} created.", username);
-            }
+        <!--Gives an error message in case the user already exists.-->
+        errorMessage = String.Format("User '{0}' already exists.", username);
+        }
+    else
+        {
+        <!--Creates the new user account, and creates the hash entry.-->
+        WebSecurity.CreateUserAndAccount(username,password,null,false);
+        WebSecurity.Login(username, password, true);
+        errorMessage = String.Format("{0} created.", username);
         }
     }
+
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="@Href("~/")Cafeen.css" type="text/css" />
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-
-<body>
     <h1>Sign Up</h1>
     <form method="post">
         <p>
@@ -89,5 +79,3 @@
             <a href="@Href("~/index")">Home</a>
         </p>
     </form>
-</body>
-</html>
