@@ -9,7 +9,7 @@
 
     <!--Handles the first time the user enters the page.-->
     if(!IsPost)
-    {
+        {
         <!--Here it is made sure that the ID is not empty, and that it is indeed an integer-->
         if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
             {
@@ -17,56 +17,60 @@
             var db = Database.Open("Cafeen");
             var dbCommand = "SELECT * FROM Products WHERE ID = @0";
             var rows = db.QuerySingle(dbCommand, ProductID);
+            
             <!--if the row is equal to null then we skip because we will get an error if we try and get informaiton out of an empty row.-->
             if(rows != null)
-            {
+                {
                 ProductName = rows.ProductName;
                 Stock = rows.Stock;
-            } 
-                else 
-            {
+                } 
+            else 
+                {
                 Validation.AddFormError("No Product was found for that ID.");
-            }
+                }
             }
         else
-        {
+            {
             <!--This line produces an error message, in case the user presses the update product button after having entered the page without a Product ID-->
             Validation.AddFormError("No Product was selected.");
+            }
         }
-      }
 
     <!--If the update product button is pressed, we require the input field to be full, and then request what's inside the input field.-->
-    if(IsPost){ 
- 
+    if(IsPost)
+        { 
         Validation.RequireField("Stock", "You haven't entered a Stock number");
         Validation.RequireField("ProductID", "No product ID was submitted!");
-
         Stock = Request.Form["Stock"].AsInt();
         ProductID = Request.Form["ProductID"];
 
         <!--Opens the database and updates the product information, by calling the EditProduct-->
-        if(Validation.IsValid()){
+        if(Validation.IsValid())
+            {
             Funcs.EditProduct(Stock, ProductID);
-            Response.Redirect("~/Members/CountNew.cshtml");
+            Response.Redirect("~/Members/InventoryCount.cshtml");
+            }
         }
-    }
 }
 
 
-  <form method="post">
+<form method="post">
     <fieldset>
-      <legend>Update Stock for @ProductName</legend>
-      <p><label for="Stock">Stock:</label>
-         <input type="number" name="Stock" value="@Stock"/>
-         @Html.ValidationMessage("Stock")
-      </p>
+        <legend>Update Stock for @ProductName</legend>
+        <p>
+            <label for="Stock">Stock:</label>
+            <input type="number" name="Stock" value="@Stock"/>
+            @Html.ValidationMessage("Stock")
+        </p>
 
-      <!--Gives the product a hidden ID to be used to restore information about the ID from the database-->
-      <input type="hidden" name="ProductID" value="@ProductID" />
-
-      <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
+        <!--Gives the product a hidden ID to be used to restore information about the ID from the database-->
+        <input type="hidden" name="ProductID" value="@ProductID" />
+        <p>
+            <input type="submit" name="buttonSubmit" value="Submit Changes" />
+        </p>
     </fieldset>
-  </form>
-    <p>
-        <a href="~/Members/CountNew.cshtml">Return to Inventory Count</a>
-    </p>
+</form>
+
+<p>
+    <a href="~/Members/CountNew.cshtml">Return to Inventory Count</a>
+</p>

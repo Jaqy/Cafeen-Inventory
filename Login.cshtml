@@ -6,18 +6,20 @@
     var password = "";
     var errorMessage = "";
    
-    if(IsPost){
+    if(IsPost)
+        {
         username = Request["username"];
         password = Request["password"];
         <!--Checks if the username and password match, and authenticates the user's login status.-->
-        if(WebSecurity.Login(username,password,true)){
+        if(WebSecurity.Login(username,password,true))
+            {
             Response.Redirect("~/index");
-        }
+            }
         else
-        {
+            {
             errorMessage = "Login was not successful.";
+            }
         }
-    }
 }
 
 
@@ -32,31 +34,42 @@
         <h1>Login</h1>
         <form method="post">
             <!--Gives an error message in case the user us already logged in.-->
-            @if(WebSecurity.IsAuthenticated){
+            @if(WebSecurity.IsAuthenticated)
+                {
                 <p>You are currently logged in as @WebSecurity.CurrentUserName.
-                  <a href="@Href("~/Logout")">Log out</a>
+                    <a href="@Href("~/Logout")">Log out</a>
                 </p>
-            }
+                }
           <p>
             <label for="username">Username:</label><br/>
             <input type="text" name="username" id="username" value="" />
           </p>
+          
           <p>
             <label for="password">Password:</label><br/>
             <input type="password" name="password" id="password" value="" />
           </p>   
+          
           <p>
             <input type="submit" value="Sign in" />
           </p>   
            
-          <p>Not registered? <a href="@Href("~/Register")">Register</a></p>
-          <p><a href="@Href("~/index")">Return to home page</a></p>
-           
+          <p>
+              Not registered? 
+              <a href="@Href("~/Register")">Register</a>
+          </p>
+          
+          <p>
+              <a href="@Href("~/index")">Return to home page</a>
+          </p>
+        
         </form>
+        
         <p>
-            @if(errorMessage != ""){
+            @if(errorMessage != "")
+                {
                 <span class="errorMessage">@errorMessage</span>
-            }
+                }
         </p>
    </body>
 </html>

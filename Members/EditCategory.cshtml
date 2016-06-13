@@ -6,93 +6,104 @@
     var NewCategory = "";
     double NewPrice = 0.0;
 
+    <!--Validates that there is a genuine input in the fields so no blanks is created-->
+    <!--The style section contains yellow boxes for error messages to stand out-->
+    Validation.RequireField("NewCategory", "You haven't entered a Product Name");
+
     <!--Opens the database-->
     var db = Database.Open("Cafeen");
 
-
-
-    //These variables are used to store the old values, so they can be compared to the new values and added to the log accordingly.
+    <!--These variables are used to store the old values, so they can be compared to the new values and added to the log accordingly. -->
     string OldCategory = "";
     string OldPrice = "";
-
 
     <!--Collect the existing categories from the Database-->
     var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
 
     <!--The if statement starts if the user clicks on the "Update Category" and indputs the users values into the Database.-->
-    if(IsPost)
-    {
+    if(IsPost && Validation.IsValid())
+        {
         <!--Handle all the user inputs-->
         var dbCommand = "SELECT * FROM Products WHERE Category = @0";
         Category = Request["ListCategory"];
-        //affectedProducts samler de produkter der tilhører den behandlede kategori.
+        
+        <!-- affectedProducts samler de produkter der tilhører den behandlede kategori. -->
         var affectedProducts = db.Query(dbCommand, Category);
         NewCategory = Request["NewCategory"];
         NewPrice = Convert.ToDouble(Request.Form["NewPrice"]);
         bool NewPriceCheckbox = Request["NewPriceCheckbox"].AsBool();
+        
         if(NewPriceCheckbox)
-        {
+            {
             <!--If the user wants a new price, then the AddNewProduct-function is called with a new price from Funcs.cshtml-->
-            Funcs.CategoryChangeRegistered(NewCategory, Category, Convert.ToString(NewPrice));
-
+            Funcs.CategorySaveLogData(NewCategory, Category, Convert.ToString(NewPrice));
             Funcs.EditProduct(Category, NewCategory, NewPrice); 
 
+            <!--Log entries for each product affected by the change to the category-->
             foreach(var row in affectedProducts)
-            {
-                Funcs.ChangeRegistered(Convert.ToString(row.ID), row.ProductName, row.Category, Convert.ToString(row.Price), Convert.ToString(row.PurchasePrice), Convert.ToString(row.Stock));
-            }           
-                     
-        }
+                {
+                Funcs.SaveLogData(Convert.ToString(row.ID), row.ProductName, row.Category, Convert.ToString(row.Price), Convert.ToString(row.PurchasePrice), Convert.ToString(row.Stock));
+                }           
+            }
+        
         else
-        {
-            <!--The AddNewProduct-function is called without a new price from Funcs.cshtml-->
+            {
+            <!--The AddNewProduct-function is called without a new price.-->
             Funcs.EditProduct(Category, NewCategory);
-            Funcs.CategoryChangeRegistered(NewCategory, Category);
-        }
+            Funcs.CategorySaveLogData(NewCategory, Category);
+            }
+        
         <!--Makes sure no SQL injection attack occurs, by redirecting to product the page after a product is added-->
         Response.Redirect("~/Members/Products");
     }
 }
-    <!--The style section contains yellow boxes for error messages to stand out-->
+
 
 <!--Creates the form to enter in new data to the database-->
-  <h1>Edit a category</h1>
-  <form method="post">
+<h1>Edit a category</h1>
+<form method="post">
     <fieldset>
-      <legend>Edit categories in database</legend>
 
-<!--Shows all the categorys in dropdown-->
-    <p><label for="Category">Category:</label>
-<form name="FormCategory" method="post">
-  <select name="ListCategory">
+    <!--Shows all the categorys in dropdown-->
+    <p>
+        <label class="field" for="Category">Category:</label>
+    </P>
+    
+    <form name="FormCategory" method="post">
+        <select name="ListCategory" style="width: 161px;">
             @foreach(var row in CategoryData)
-            {
+                {
                 <option value="@row.Category">@row.Category</option>
-            }
-   </select>
-</form>
+                }
+        </select>
+    </form>
 
-<!--All the userinput-->
-<!--Userinput for Category name-->
-      <p><label for="NewCategory">New category name:</label>
-         <input type="text" name="NewCategory" value="@Request.Form["NewCategory"]" />
-          @Html.ValidationMessage("Stock")
-      </p>
+    <!--All the userinput-->
+    <!--Userinput for Category name-->
+    <p>
+        <label class="field" for="NewCategory">New category name:</label>
+        <input type="text" name="NewCategory" value="@Request.Form["NewCategory"]" />
+        @Html.ValidationMessage("NewCategory")
+    </p>
         
-<!--The checkbox if the user wants a new price-->         
-  <div>
-    @Html.CheckBox("NewPriceCheckbox", new { value = "true" })
-    <label for="NewPriceCheckbox">Do you want to change all prices for the edited category?</label>
+    <!--The checkbox if the user wants a new price-->         
+    <div>
+        <label class="field" for="NewPriceCheckbox">Change prices?</label>
+        @Html.CheckBox("NewPriceCheckbox", new { value = "true" })    
 
-<!--Shows the inputbox for a new price, if the "New Price" checkbox is checkt-->
-    <div class="reveal-if-active">
-      <p><label for="NewPrice">New price:</label>
-         <input type="number" name="NewPrice" value="0.0" />
+        <!--Shows the inputbox for a new price, if the "New Price" checkbox is checkt-->
+        <div class="reveal-if-active">
+            <p>
+                <label class="field" for="NewPrice">New price:</label>
+                <input type="number" name="NewPrice" value="0.0" />
+            </p>
+        </div>
+    </div> 
 
-      </p>
-    </div>
-  </div> 
-<!--The submit button-->
-      <p><input type="submit" name="buttonSubmit" value="Update category" /></p>
+    <!--The submit button-->
+    <p>
+        <input type="submit" name="buttonSubmit" value="Update category" />
+    </p>
+
     </fieldset>
-  </form>
+</form>

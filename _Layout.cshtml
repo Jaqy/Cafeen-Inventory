@@ -62,32 +62,36 @@
   <body>
     <div id="container">
         <div id="header">
-        <img src="~/Links/logo.png" alt="Cafeen Logo" style="width: 128px; height: 128px">
+            <img src="~/Links/logo.png" alt="Cafeen Logo" style="width: 128px; height: 128px">
         </div>
         <div id="main">
-        <ul>
+            <ul>
                 <li><a href="@Href("~/index")">Home</a></li>
                 <li><a href="@Href("~/Members/Products")">Inventory List</a></li>
                 <li><a href="@Href("~/Members/AddToDatabase")">Add new product</a></li>
                 <li><a href="@Href("~/Members/EditCategory")">Edit Category</a></li>
-                <li><a href="@Href("~/Members/CountNew")">Inventory Count</a></li>
+                <li><a href="@Href("~/Members/InventoryCount")">Inventory Count</a></li>
                 <li><a href="@Href("~/Members/Charts")">Charts</a></li>
                 <li><a href="@Href("~/Members/History")">History</a></li>
                 <li><a href="@Href("~/Members/Log")">Log</a></li>
-                 @if(WebSecurity.IsAuthenticated){
+                <li><a href="@Href("~/TestArea")">Test Area</a></li>
+                @if(WebSecurity.IsAuthenticated)
+                    {
                     <li style="float:right"><a href="@Href("~/logout")">Logout</a></li>
-                }
+                    }
                 else{
                     <li style="float:right"><a href="@Href("~/login")">Login</a></li>
-                }
-        </ul>
+                    }
+            </ul>
         </div>
+        
         <!--style="float:right">-->
         <div id="main">
-          @RenderBody()
+            @RenderBody()
         </div>
+        
         <div id="footer">
-          &copy; @DateTime.Now.Year Cafeen's inventory
+            &copy; @DateTime.Now.Year Cafeen's inventory
         </div>
     </div>
   </body>

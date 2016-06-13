@@ -10,74 +10,94 @@
     var Stock = 0.0;
 
     <!--When the submit button has yet to be pressed, the product ID is read, in order to display relevant product information.-->
-    if(!IsPost){
-        if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt()){
+    if(!IsPost)
+        {
+        if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
+            {
             ProductID = Request.QueryString["ID"];
             var db = Database.Open("Cafeen");
             var dbCommand = "SELECT * FROM Products WHERE ID = @0";
             var rows = db.QuerySingle(dbCommand, ProductID);
 
-            if(rows != null) {
+            if(rows != null)
+                {
                 ProductName = rows.ProductName;
                 Category = rows.Category;
                 Price = rows.Price;
                 PurchasePrice = rows.PurchasePrice;
                 Stock = rows.Stock;
-            }
-            else{
+                }
+            
+            else
+                {
                 Validation.AddFormError("No Product was found for that ID.");
+                }
             }
-        }
+        
         else
-        {
+            {
             <!--This line produces an error message, in case the user presses the update product button after having entered the page without a Product ID-->
             Validation.AddFormError("No Product was selected.");
+            }
         }
-    }
     
         <!--The delete button calls the DeleteProduct function.-->
-        if(IsPost && !Request["buttonDelete"].IsEmpty()){
-        ProductID = Request.Form["ProductID"];
-        var db = Database.Open("Cafeen");
-        var dbCommand = "SELECT * FROM Products WHERE ID = @0";
-        var rows = db.QuerySingle(dbCommand, ProductID);
-        ProductName = rows.ProductName;
-        //Creates log entry for the deletion of the product.
-        Funcs.ChangeRegistered(ProductID, ProductName);
-        //Deletes the product from the Products table.
-        Funcs.DeleteProduct(ProductID);
-        Response.Redirect("~/Members/Products");
-    }
+        if(IsPost && !Request["buttonDelete"].IsEmpty())
+            {
+            ProductID = Request.Form["ProductID"];
+            ProductName = Funcs.GetProductName(ProductID);
+
+            //Deletes the product from the Products table.
+            Funcs.DeleteProduct(ProductID);
+
+            //Creates log entry for the deletion of the product.
+            Funcs.SaveLogData(ProductID, ProductName);
+            Response.Redirect("~/Members/Products");
+            }
 }
 
-      <h1>Delete a Product</h1>
-      <!--Creates the areas for the product information to be displayed in.-->
-      <form method="post">
-        <fieldset>
-        <legend>Product Information</legend>
+<h1>Delete a Product</h1>
 
-        <p><span>ProductName:</span>
-         <span>@ProductName</span></p>
+<!--Creates the areas for the product information to be displayed in.-->
+<form method="post">
+    <fieldset>
+    <legend>Product Information</legend>
 
-        <p><span>Category:</span>
-         <span>@Category</span></p>
+    <p>
+        <span>ProductName:</span>
+        <span>@ProductName</span>
+    </p>
 
-        <p><span>Price:</span>
-          <span>@Price</span></p>
+    <p>
+        <span>Category:</span>
+        <span>@Category</span>
+    </p>
 
-        <p><span>PurchasePrice:</span>
-          <span>@PurchasePrice</span></p>
+    <p>
+        <span>Price:</span>
+        <span>@Price</span>
+    </p>
 
-        <p><span>Stock:</span>
-          <span>@Stock</span></p>
+    <p>
+        <span>PurchasePrice:</span>
+        <span>@PurchasePrice</span>
+    </p>
 
-        <!--Creates the hidden ProductID to be used when deleting an object, and creates the button to delete -->
-        <input type="hidden" name="ProductID" value="@ProductID" />
-        <p><input type="submit" name="buttonDelete" value="Delete Product" /></p>
-        </fieldset>
-      </form>
+    <p>
+        <span>Stock:</span>
+        <span>@Stock</span>
+    </p>
 
-      <!--Creates the return to product listigs link-->
-         <p>
-            <a href="~/Members/Products">Return to Product listings</a>
-         </p>
+    <!--Creates the hidden ProductID to be used when deleting an object, and creates the button to delete -->
+    <input type="hidden" name="ProductID" value="@ProductID" />
+    <p>
+        <input type="submit" name="buttonDelete" value="Delete Product" />
+    </p>
+
+    </fieldset>
+</form>
+
+<!--Creates the return to product listigs link-->
+<p>
+    <a href="~/Members/Products">Return to Product listings</a>
+</p>

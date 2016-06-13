@@ -1,0 +1,72 @@
+﻿ 
+@{
+    Page.title = "Inventory Count"; 
+
+    var db = Database.Open("Cafeen") ;
+    var selectCommand = "SELECT * FROM Products";
+    var searchTerm = "";
+    var CountType = "";
+    var selectedData = db.Query(selectCommand, searchTerm);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Category", rowsPerPage:999);
+    
+    if( Request["CountOption"] != null)
+        {
+        CountType = Request["CountOption"];
+        }
+    
+    if(IsPost)
+        {
+        db.Execute("UPDATE Products SET CountType=@0", CountType);
+        
+        //Moves the content of the Products tabel to the History tabel for future reference.
+        Funcs.AddHistoryData();
+
+        //Adds log event documented the performance of the count 
+        string comment = "Inventory count of type ''" + CountType + "'' saved to History.";
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, CountType); 
+                     
+        Response.Redirect("~/Members/Products.cshtml");
+        }
+
+}
+
+
+<h2>Inventory List</h2>
+<h3>Date: @DateTime.Now</h3>
+
+<!--Creat a tabel with all the products in the inventory-->
+<form method="post" action="">
+    <div>
+        @grid.GetHtml(
+            tableStyle: "grid",
+            headerStyle: "head",
+            alternatingRowStyle: "alt",
+            columns: grid.Columns(
+                grid.Column("ProductName"),
+                grid.Column("Category"),
+                grid.Column("Stock"),
+                grid.Column(format: @<a href="~/Members/UpdateStock?id=@item.ID">Edit</a>)
+            )
+        )
+    </div>
+
+<!--Option to select the different type of inventory counts you can register-->
+<p>
+    <label>Type of inventory count</label>
+</p>
+    <select name="CountOption">
+        <option value=""></option>
+        <option value="Opening">Opening</option>
+        <option value="Closing">Closing</option>
+        <option value="SpecialEventOpening">Special Event Opening</option>
+        <option value="SpecialEventClosing">Special Event Closing</option>
+    </select>
+
+<input type="Submit" value="Save Count" />
+
+</form>
+
+
+
+
+ 
