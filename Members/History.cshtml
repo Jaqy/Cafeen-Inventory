@@ -37,12 +37,14 @@
 <form method="post">
     <div id="grid">
         <p>
-            Start Date: <input type="text" name="StartDate" id="datepicker" size="30" value="@Request.QueryString["StartDate"]" />
+            <label class="logField" for="StartDate">Start Date:</label>
+            <input type="text" name="StartDate" id="datepicker" size="30" value="@Request.QueryString["StartDate"]" />
             @Html.ValidationMessage("StartDate")
         </p>
         
         <p>
-            End Date: <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
+            <label class="logField" for="EndDate">End Date:</label>
+            <input type="text" name="EndDate" id="datepicker2" size="30" value="@Request.QueryString["EndDate"]" />
             @Html.ValidationMessage("EndDate")
         </p>
              
