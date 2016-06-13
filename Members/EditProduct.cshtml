@@ -53,7 +53,7 @@
 
     if(IsPost)
         { 
-        <!--If the update product button is pressed, we require all 4 fields to be filled out, and then request what's inside the fields.-->
+        <!--If the update product button is pressed, we require all 6 fields to be filled out, and then request what's inside the fields.-->
         Validation.RequireField("ProductName", "You haven't entered a Product Name");
         Validation.RequireField("Category", "You haven't entered a Category");
         Validation.RequireField("Price", "You haven't entered a Price");
@@ -86,31 +86,31 @@
     <fieldset>
         <legend>Add product to database</legend>
         <p>
-            <label for="ProductName">Product Name:</label>
+            <label class="field" for="ProductName">Product Name:</label>
             <input type="text" name="ProductName" value="@ProductName" />
             @Html.ValidationMessage("ProductName")
         </p>
 
         <p>
-            <label for="Category">Category:</label>
+            <label class="field" for="Category">Category:</label>
             <input type="text" name="Category" value="@Category" />
             @Html.ValidationMessage("Category")
         </p>
 
         <p>
-            <label for="Price">Price:</label>
+            <label class="field" for="Price">Price:</label>
             <input type="number" name="Price" value="@Price" />
             @Html.ValidationMessage("Price")
         </p>
 
         <p>
-            <label for="PurchasePrice">Purchase Price:</label>
+            <label class="field" for="PurchasePrice">Purchase Price:</label>
             <input type="number" name="PurchasePrice" value="@PurchasePrice"/>
             @Html.ValidationMessage("PurchasePrice")
         </p>
 
         <p>
-            <label for="Stock">Stock:</label>
+            <label class="field" for="Stock">Stock:</label>
             <input type="number" name="Stock" value="@Stock"/>
              @Html.ValidationMessage("Stock")
         </p>
