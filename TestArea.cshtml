@@ -113,7 +113,7 @@
             DeleteProduct_test += "Passed";
         }
                 
-        if (db.QueryValue("SELECT COUNT(*) FROM Log WHERE ProductName = 'TestRename'") > 0)
+        if (db.QueryValue("SELECT COUNT(*) FROM Log WHERE Parameter = 'TestRename'") > 0)
         {
             DeleteProduct_log += "Passed";
         }
@@ -122,7 +122,7 @@
             DeleteProduct_log += "Failed";
         }
 
-        db.Execute("DELETE FROM Log WHERE ProductName = 'TestRename'");
+        db.Execute("DELETE FROM Log WHERE Parameter = 'TestRename'");
     }
 }
 

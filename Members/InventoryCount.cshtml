@@ -23,7 +23,7 @@
 
         //Adds log event documented the performance of the count 
         string comment = "Inventory count of type ''" + CountType + "'' saved to History.";
-        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, CountType); 
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, CountType); 
                      
         Response.Redirect("~/Members/Products.cshtml");
         }

@@ -82,7 +82,7 @@
         {
         var db = Database.Open("Cafeen");
         string comment = Stock + " " + ProductName + " added to database under the category " + Category + ".";
-        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, ProductName); 
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, ProductName); 
         }
 
 
@@ -92,7 +92,7 @@
         {
         var db = Database.Open("Cafeen");
         string comment = "New category called " + Category + " created.";
-        db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, Category); 
         }
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a product is deleted. Used on DelteProduct.cshtml
@@ -100,7 +100,7 @@
         {
         var db = Database.Open("Cafeen");
         string comment = "Product " + ProductName + " with ID '" + ProductID + "' deleted.";
-        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, ProductName); 
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, ProductName); 
         }
 
     //Creates a log event (string) and adds it to the the "Log" tabel, when a a product is changed in generel. Used on EditProduct.cshtml
@@ -140,7 +140,7 @@
             }
         
         var comment = sb.ToString();
-        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, OldProductName); 
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, OldProductName); 
         }
 
 
@@ -162,7 +162,7 @@
             }
 
         var comment = sb.ToString();
-        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, OldCategory); 
+        db.Execute("INSERT INTO Log (Event, Parameter) VALUES(@0, @1)", comment, OldCategory); 
         }
 
 
