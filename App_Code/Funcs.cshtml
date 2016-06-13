@@ -162,9 +162,12 @@
             }
 
         var comment = sb.ToString();
-        db.Execute("INSERT INTO Log (Event) VALUES(@0)", comment); 
+        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, OldCategory); 
         }
 
+
+    //-----------------------------------------------------UpdateCountType-----------------------------------------\\
+    
     //Update the type of count on a product
     public static void UpdateCountType(string CountType)
         {

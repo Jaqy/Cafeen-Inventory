@@ -13,7 +13,7 @@
         
     if (IsPost && Validation.IsValid() ) 
         {
-        searchTerm = Request["searchProductName"];
+        searchTerm = Request["searchParameter"];
         searchTerm_Start = Request["StartDate"];
         searchTerm_End = Request["EndDate"];
 
@@ -49,7 +49,7 @@
         </p>
                
         <p>
-            <label class="logField" for="searchProductName">Product:</label><input type="text" name="searchProductName" size="20" value="@Request.QueryString["searchProductName"]" />
+            <label class="logField" for="searchParameter">Parameter:</label><input type="text" name="searchParameter" size="20" value="@Request.QueryString["searchParameter"]" />
         </p>
                 
         <input type="Submit" value="Search"/>
@@ -61,7 +61,7 @@
                 alternatingRowStyle: "alt",
                 columns: grid.Columns(
                     grid.Column("Date", format:@<text> @item.Date.ToString("dd-MM-yyyy")</text>),
-                    grid.Column("ProductName"),
+                    grid.Column("ProductName", "Parameter"),
                     grid.Column("Event")
                     )
                 )

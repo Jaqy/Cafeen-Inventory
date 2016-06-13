@@ -8,7 +8,6 @@
     var CountType = "";
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Category", rowsPerPage:999);
-    var CategoryData = db.Query("SELECT DISTINCT Category FROM Products");
     
     if( Request["CountOption"] != null)
         {
@@ -19,8 +18,13 @@
         {
         db.Execute("UPDATE Products SET CountType=@0", CountType);
         
-        <!--Creates a log of the inventory list to history databasen-->
+        //Moves the content of the Products tabel to the History tabel for future reference.
         Funcs.AddHistoryData();
+
+        //Adds log event documented the performance of the count 
+        string comment = "Inventory count of type ''" + CountType + "'' saved to History.";
+        db.Execute("INSERT INTO Log (Event, ProductName) VALUES(@0, @1)", comment, CountType); 
+                     
         Response.Redirect("~/Members/Products.cshtml");
         }
 
